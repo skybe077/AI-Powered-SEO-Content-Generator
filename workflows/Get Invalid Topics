@@ -1,0 +1,3057 @@
+{
+  "name": "Get Invalid Topics - v1",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -380,
+        -400
+      ],
+      "id": "6fb648fe-46f0-47b5-b80b-7f6829a12bc5",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": " stats",
+        "include": "selectedOtherFields",
+        "fieldsToInclude": "user_id, seed_concept, geo, geo_label",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -20,
+        200
+      ],
+      "id": "a2537e9a-e3ae-402e-bbe5-6570603892a0",
+      "name": "Get Stats"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "topic_ideas",
+          "mode": "list",
+          "cachedResultName": "topic_ideas"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "xata_version": 0,
+            "count_keyword": "={{ $json.stats.count_keyword }}",
+            "unspecifiedRatio": "={{ $json.stats.unspecifiedRatio }}",
+            "opportunityRatio": "={{ $json.stats.opportunityRatio }}",
+            "veryLowRatio": "={{ $json.stats.veryLowRatio }}",
+            "topic_validity": "={{ $json.stats.topic_validity }}",
+            "user_id": "={{ $json.user_id }}",
+            "seed_concept": "={{ $json.seed_concept }}",
+            "geo": "={{ $json.geo }}",
+            "topic_delocalised": "={{ $json.stats.topic_delocalised }}"
+          },
+          "matchingColumns": [
+            "user_id",
+            "seed_concept",
+            "geo",
+            "topic_delocalised"
+          ],
+          "schema": [
+            {
+              "id": "xata_version",
+              "displayName": "xata_version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "xata_createdat",
+              "displayName": "xata_createdat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "xata_updatedat",
+              "displayName": "xata_updatedat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "xata_id",
+              "displayName": "xata_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "topic",
+              "displayName": "topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "usefulness",
+              "displayName": "usefulness",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "seed_concept",
+              "displayName": "seed_concept",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "topic_delocalised",
+              "displayName": "topic_delocalised",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "geo",
+              "displayName": "geo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "geo_label",
+              "displayName": "geo_label",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "count_keyword",
+              "displayName": "count_keyword",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "topic_validity",
+              "displayName": "topic_validity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "unspecifiedRatio",
+              "displayName": "unspecifiedRatio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "opportunityRatio",
+              "displayName": "opportunityRatio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "veryLowRatio",
+              "displayName": "veryLowRatio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        240,
+        200
+      ],
+      "id": "c699541a-b344-4985-b34e-cd4fdfd23a97",
+      "name": "Update topics with stats",
+      "credentials": {
+        "postgres": {
+          "id": "gHDVg0wQVPiBMdAw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "612fc429-7276-4621-9cef-a89a9c4206e0",
+              "leftValue": "={{ $json.topic_validity }}",
+              "rightValue": "insufficient",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        740,
+        200
+      ],
+      "id": "c3a95a89-f7f3-430c-9629-b2d7c040c28e",
+      "name": "Filter Insufficient Topics",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "topic_delocalised"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        180
+      ],
+      "id": "dbeccfb4-9ce5-4b68-b517-552236991784",
+      "name": "Aggregate topics"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e7243a16-52fa-4ddc-bacd-f9d795c7a680",
+              "name": "seed_concept",
+              "value": "={{ $('Filter Insufficient Topics').first().json.seed_concept }}",
+              "type": "string"
+            },
+            {
+              "id": "782aefce-f069-40b8-8dae-f6fbb66142fe",
+              "name": "geo",
+              "value": "={{ $('Filter Insufficient Topics').first().json.geo }}",
+              "type": "string"
+            },
+            {
+              "id": "18a719e0-b3c1-41cb-af5b-486ffc91a223",
+              "name": "user_id",
+              "value": "={{ $('Filter Insufficient Topics').first().json.user_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e8855c80-4e69-4e14-892c-1cc3f76c87f5",
+              "name": "topic_volume",
+              "value": "={{ $json.topic_delocalised.length }}",
+              "type": "number"
+            },
+            {
+              "id": "fdde056a-64a0-479b-9271-1bf891f54171",
+              "name": "exclude_topics",
+              "value": "={{ $json.topic_delocalised }}",
+              "type": "array"
+            },
+            {
+              "id": "96b3c825-bc82-4e0f-a594-11a55fcfd265",
+              "name": "geo_label",
+              "value": "={{ $('Filter Insufficient Topics').first().json.geo_label }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1340,
+        180
+      ],
+      "id": "209e5d79-9086-44e4-bf7a-1ff516472517",
+      "name": "Create Payload"
+    },
+    {
+      "parameters": {
+        "content": "## 🧠 Get Invalid Topics – v1\n**Last Updated: 18 Apr 2025**\n\nThis helper agent identifies SEO topics that have insufficient or weak keyword data, updates their status in the `topic_ideas` table, and prepares a clean payload for the Topic Expansion Agent to regenerate better alternatives.\n\nIt supports the SEO Agent’s feedback loop by ensuring low-quality topics are flagged and retried with new phrasings.\n\n---\n\n#### 🔍 Overview\nThis agent takes a stream of topics and:\n- Updates keyword stats and topic validity in the DB (via Xata/Postgres)\n- Filters topics where `topic_validity = insufficient`\n- Groups and deduplicates these topics\n- Packages them with original metadata (user ID, geo, seed concept, etc.)\n- Sends them to the Topic Expansion Agent for retry\n\n---\n\n### 🧩 Key Features\n1. Splits out topic stats from incoming payloads\n2. Updates DB with enriched metrics (volume, ratios, flags)\n3. Filters invalid topics for reprocessing\n4. Aggregates & deduplicates `topic_delocalised`\n5. Constructs clean regeneration payload with context\n\n---\n\n### 🔁 Feedback & Regeneration\n- Only `insufficient` topics are passed downstream\n- Exclude list (`exclude_topics`) is formed to prevent repeat attempts\n- `topic_volume`, `regen_loop`, and metadata are preserved for regeneration\n\n---\n\n### 🧪 Inputs\n- `stats[]`: Array of topic-level statistics (e.g. validity, ratios)\n- `user_id`, `seed_concept`, `geo`, `geo_label`: Context for DB update and feedback routing\n\n---\n\n### 📤 Output\nPayload sent to `Topic Expansion Agent` includes:\n- `exclude_topics[]`: List of rejected topic names\n- `user_id`, `seed_concept`, `geo`, `geo_label`\n- `topic_volume`: Count of rejected topics\n\n---\n\n### 🔧 Stack\n- n8n for flow orchestration\n- Xata (via Postgres node)\n- Topic Expansion Agent (executed via subworkflow)\n- AppSmith for workflow initiation",
+        "height": 920,
+        "width": 500
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1360,
+        -160
+      ],
+      "id": "097cee95-aa68-43a5-9bc8-68baef00b28f",
+      "name": "📘 Get Invalid Topics – README"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 1: Update Stats to DB\n**Purpose**:  \nExtracts topic-level stats and writes them to the `topic_ideas` table in Xata via Postgres.\n\n**Flow**:\n- Extract stats per topic\n- Update `topic_validity`, volume stats, ratios, and metadata into DB\n- Acts as a historical record of topic viability\n\n**Expected Output**:  \nEach row in DB reflects updated stats for analysis and validation",
+        "height": 520,
+        "width": 720,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        -100
+      ],
+      "id": "2952f7bd-65ee-4169-8b3e-5cbd68a4e71d",
+      "name": "🧩 Block 1: Update Stats to DB"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 2: Filter Invalid Topics\n**Purpose**:  \nIdentifies topics with `topic_validity = insufficient` that need to be regenerated.\n\n**Flow**:\n- Checks validity per topic\n- Forwards only failed topics to the next step\n- Keeps valid ones for logging or archiving\n\n**Output**:\nFiltered stream of only weak topics",
+        "height": 520,
+        "width": 360,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        620,
+        -100
+      ],
+      "id": "034418bd-07d1-456e-83fd-a415cb3f5ea9",
+      "name": "🧩 Block 2: Filter Invalid Topics"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 3: Prepare Retry Payload\n**Purpose**:  \nBundles weak topics into a single payload with associated metadata, so they can be sent to the Topic Expansion Agent.\n\n**Steps**:\n- Aggregate topic names\n- Include user context (user ID, geo, label)\n- Count number of failed topics (topic_volume)\n- Add to `exclude_topics` to avoid duplication in retries",
+        "height": 520,
+        "width": 580,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        -100
+      ],
+      "id": "08702ee9-990c-4b43-8af9-9cda82e6b226",
+      "name": "🧩 Block 3: Prepare Retry Payload"
+    },
+    {
+      "parameters": {
+        "content": "---\n\n### 🔁 Feedback & Regeneration\n- Only `insufficient` topics are passed downstream\n- Exclude list (`exclude_topics`) is formed to prevent repeat attempts\n- `topic_volume`, `regen_loop`, and metadata are preserved for regeneration\n\n---\n### 🧪 Inputs\n- `stats[]`: Array of topic-level statistics (e.g. validity, ratios)\n- `user_id`, `seed_concept`, `geo`, `geo_label`: Context for DB update and feedback routing\n\n---\n\n### 📤 Output\nPayload sent to `Topic Expansion Agent` includes:\n- `exclude_topics[]`: List of rejected topic names\n- `user_id`, `seed_concept`, `geo`, `geo_label`\n- `topic_volume`: Count of rejected topics\n\n---\n\n### 🔧 Stack\n- n8n for flow orchestration\n- Xata (via Postgres node)\n- Topic Expansion Agent (executed via subworkflow)\n- AppSmith for workflow initiation",
+        "height": 920,
+        "width": 440
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -160
+      ],
+      "id": "de0d8e22-2a79-4033-be13-311999c2c639",
+      "name": "📘 Get Invalid Topics – README1"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -280,
+        200
+      ],
+      "id": "df2b6275-235f-4d8d-9eb5-ebf63c265d89",
+      "name": "Invalid Topics"
+    }
+  ],
+  "pinData": {
+    "When clicking ‘Test workflow’": [
+      {
+        "json": {
+          "stats": [
+            {
+              "topic_delocalised": "ai solutions for startups",
+              "very_low_band": "2",
+              "count_keyword": 2,
+              "UNSPECIFIED_competition": "2",
+              "topic_validity": "insufficient",
+              "unspecifiedRatio": 1,
+              "opportunityRatio": 0,
+              "veryLowRatio": 1
+            }
+          ],
+          "seo_keywords": [
+            {
+              "topic_delocalised": "ai solutions for startups",
+              "geo": "sg",
+              "keyword": "ai solutions for startups",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai solutions for startups",
+              "geo": "sg",
+              "keyword": "ai platform startups",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 10,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            }
+          ],
+          "user_id": "s@gmail.com",
+          "seed_concept": "AI for business ",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "stats": [
+            {
+              "topic_delocalised": "ai tools for small businesses",
+              "very_low_band": "3",
+              "count_keyword": 3,
+              "UNSPECIFIED_competition": "2",
+              "LOW_competition": "1",
+              "topic_validity": "insufficient",
+              "unspecifiedRatio": 0.6666666666666666,
+              "opportunityRatio": 0.3333333333333333,
+              "veryLowRatio": 1
+            }
+          ],
+          "seo_keywords": [
+            {
+              "topic_delocalised": "ai tools for small businesses",
+              "geo": "sg",
+              "keyword": "ai tools for small businesses",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 20,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 20,
+                "dec 2024": 20,
+                "jan 2025": 10,
+                "feb 2025": 20
+              }
+            },
+            {
+              "topic_delocalised": "ai tools for small businesses",
+              "geo": "sg",
+              "keyword": "best ai tools for small business",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 0,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai tools for small businesses",
+              "geo": "sg",
+              "keyword": "ai software for small business",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 10,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            }
+          ],
+          "user_id": "s@gmail.com",
+          "seed_concept": "AI for business ",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "stats": [
+            {
+              "topic_delocalised": "ai platforms for business growth",
+              "very_low_band": "1",
+              "count_keyword": 1,
+              "UNSPECIFIED_competition": "1",
+              "topic_validity": "insufficient",
+              "unspecifiedRatio": 1,
+              "opportunityRatio": 0,
+              "veryLowRatio": 1
+            }
+          ],
+          "seo_keywords": [
+            {
+              "topic_delocalised": "ai platforms for business growth",
+              "geo": "sg",
+              "keyword": "ai platforms for business growth",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {}
+            }
+          ],
+          "user_id": "s@gmail.com",
+          "seed_concept": "AI for business ",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "stats": [
+            {
+              "topic_delocalised": "integrating ai in enterprises",
+              "very_low_band": "1",
+              "count_keyword": 1,
+              "UNSPECIFIED_competition": "1",
+              "topic_validity": "insufficient",
+              "unspecifiedRatio": 1,
+              "opportunityRatio": 0,
+              "veryLowRatio": 1
+            }
+          ],
+          "seo_keywords": [
+            {
+              "topic_delocalised": "integrating ai in enterprises",
+              "geo": "sg",
+              "keyword": "integrating ai in enterprises",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {}
+            }
+          ],
+          "user_id": "s@gmail.com",
+          "seed_concept": "AI for business ",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "stats": [
+            {
+              "topic_delocalised": "ai marketing tools review",
+              "very_low_band": "2",
+              "count_keyword": 2,
+              "UNSPECIFIED_competition": "2",
+              "topic_validity": "insufficient",
+              "unspecifiedRatio": 1,
+              "opportunityRatio": 0,
+              "veryLowRatio": 1
+            }
+          ],
+          "seo_keywords": [
+            {
+              "topic_delocalised": "ai marketing tools review",
+              "geo": "sg",
+              "keyword": "marketingblock ai",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai marketing tools review",
+              "geo": "sg",
+              "keyword": "ai marketing tools review",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {}
+            }
+          ],
+          "user_id": "s@gmail.com",
+          "seed_concept": "AI for business ",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "stats": [
+            {
+              "topic_delocalised": "ai analytics for retail businesses",
+              "very_low_band": "2",
+              "count_keyword": 2,
+              "UNSPECIFIED_competition": "2",
+              "topic_validity": "insufficient",
+              "unspecifiedRatio": 1,
+              "opportunityRatio": 0,
+              "veryLowRatio": 1
+            }
+          ],
+          "seo_keywords": [
+            {
+              "topic_delocalised": "ai analytics for retail businesses",
+              "geo": "sg",
+              "keyword": "ai and retail industry",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai analytics for retail businesses",
+              "geo": "sg",
+              "keyword": "ai analytics for retail businesses",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {}
+            }
+          ],
+          "user_id": "s@gmail.com",
+          "seed_concept": "AI for business ",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "stats": [
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "low_band": "7",
+              "very_low_band": "84",
+              "count_keyword": 91,
+              "MEDIUM_competition": "10",
+              "HIGH_competition": "6",
+              "LOW_competition": "13",
+              "UNSPECIFIED_competition": "62",
+              "topic_validity": "low_volume_risky",
+              "unspecifiedRatio": 0.6813186813186813,
+              "opportunityRatio": 0.25274725274725274,
+              "veryLowRatio": 0.9230769230769231
+            }
+          ],
+          "seo_keywords": [
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ai chatbots customer service",
+              "avg_monthly_searches": 20,
+              "competition_value": "MEDIUM",
+              "low_cpc": "$2.29",
+              "high_cpc": "$15.06",
+              "date": {
+                "mar 2024": 20,
+                "apr 2024": 20,
+                "may 2024": 20,
+                "jun 2024": 20,
+                "jul 2024": 20,
+                "aug 2024": 10,
+                "sep 2024": 20,
+                "oct 2024": 20,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 40
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatbot customer service",
+              "avg_monthly_searches": 40,
+              "competition_value": "MEDIUM",
+              "low_cpc": "$1.70",
+              "high_cpc": "$10.94",
+              "date": {
+                "mar 2024": 50,
+                "apr 2024": 50,
+                "may 2024": 40,
+                "jun 2024": 50,
+                "jul 2024": 40,
+                "aug 2024": 20,
+                "sep 2024": 70,
+                "oct 2024": 50,
+                "nov 2024": 40,
+                "dec 2024": 20,
+                "jan 2025": 20,
+                "feb 2025": 30
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ai customer service bot",
+              "avg_monthly_searches": 10,
+              "competition_value": "HIGH",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 0,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ai support chatbot",
+              "avg_monthly_searches": 10,
+              "competition_value": "HIGH",
+              "low_cpc": "$1.38",
+              "high_cpc": "$5.17",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ai customer service chatbot",
+              "avg_monthly_searches": 20,
+              "competition_value": "MEDIUM",
+              "low_cpc": "$4.87",
+              "high_cpc": "$13.46",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 20,
+                "sep 2024": 20,
+                "oct 2024": 20,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 20,
+                "feb 2025": 50
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "support chat bot",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer service ai bot",
+              "avg_monthly_searches": 10,
+              "competition_value": "HIGH",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 0,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "best chatbots for customer service",
+              "avg_monthly_searches": 10,
+              "competition_value": "HIGH",
+              "low_cpc": "$3.79",
+              "high_cpc": "$10.89",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 70
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer service ai chatbot",
+              "avg_monthly_searches": 10,
+              "competition_value": "HIGH",
+              "low_cpc": "$3.15",
+              "high_cpc": "$10.86",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai customer service",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 10,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 10,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai for customer service",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 10,
+                "jun 2024": 20,
+                "jul 2024": 20,
+                "aug 2024": 50,
+                "sep 2024": 20,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ai customer support bot",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 10,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ai chat support",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 0,
+                "jun 2024": 10,
+                "jul 2024": 0,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer support chat bot",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 50,
+                "nov 2024": 20,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer support ai chatbot",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatbot gartner",
+              "avg_monthly_searches": 10,
+              "competition_value": "MEDIUM",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 0,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ai customer service chat",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 10,
+                "sep 2024": 0,
+                "oct 2024": 10,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai ivr",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 10,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer chat bot",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 0,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai for customer support",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer service chatbot ai",
+              "avg_monthly_searches": 20,
+              "competition_value": "MEDIUM",
+              "low_cpc": "$2.29",
+              "high_cpc": "$15.06",
+              "date": {
+                "mar 2024": 20,
+                "apr 2024": 20,
+                "may 2024": 20,
+                "jun 2024": 20,
+                "jul 2024": 20,
+                "aug 2024": 10,
+                "sep 2024": 20,
+                "oct 2024": 20,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 40
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai for banking",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatgpt in customer service",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 10,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatbot service client",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "best support chatbots",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai for ecommerce",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 0,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "liveperson chatbot pricing",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ai chatbot netomi",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai in banking",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 0,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 0,
+                "sep 2024": 10,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chat bots for customer service",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chat bot ecommerce",
+              "avg_monthly_searches": 20,
+              "competition_value": "MEDIUM",
+              "low_cpc": "$1.67",
+              "high_cpc": "$12.68",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 20,
+                "may 2024": 20,
+                "jun 2024": 10,
+                "jul 2024": 30,
+                "aug 2024": 30,
+                "sep 2024": 20,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 20
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chat bot help",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 10,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 10,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatbot in insurance",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 20,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "zendesk chat bots",
+              "avg_monthly_searches": 30,
+              "competition_value": "MEDIUM",
+              "low_cpc": "$3.66",
+              "high_cpc": "$63.93",
+              "date": {
+                "mar 2024": 40,
+                "apr 2024": 20,
+                "may 2024": 30,
+                "jun 2024": 20,
+                "jul 2024": 20,
+                "aug 2024": 30,
+                "sep 2024": 20,
+                "oct 2024": 20,
+                "nov 2024": 20,
+                "dec 2024": 20,
+                "jan 2025": 20,
+                "feb 2025": 30
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatbot customer experience",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 10,
+                "nov 2024": 0,
+                "dec 2024": 10,
+                "jan 2025": 0,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "support chat bots",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai for insurance",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatbot in banking sector",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai insurance",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 10,
+                "jul 2024": 0,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ecommerce chat bots",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 10,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer service chatbot service",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {}
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer support chatbot solution",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "enterprise helpdesk chatbot",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {}
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chat bots customer service",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "artificial intelligence customer service bot",
+              "avg_monthly_searches": 10,
+              "competition_value": "HIGH",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 0,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai ecommerce",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 0,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 10,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatbots ai shopping assistants",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 10,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "banking ai chatbots",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 0,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatbots and customer service",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 10,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 10,
+                "nov 2024": 0,
+                "dec 2024": 10,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "benefits of chat bot",
+              "avg_monthly_searches": 10,
+              "competition_value": "MEDIUM",
+              "low_cpc": "$0.60",
+              "high_cpc": "$3.07",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 20,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 20,
+                "sep 2024": 10,
+                "oct 2024": 20,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 20,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai in insurance",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 10,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 10,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational bots for marketing and customer service",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ai chatbots banking",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 0,
+                "may 2024": 10,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 10,
+                "sep 2024": 0,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai banking",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "benefits of chat bots",
+              "avg_monthly_searches": 10,
+              "competition_value": "MEDIUM",
+              "low_cpc": "$0.60",
+              "high_cpc": "$3.07",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 20,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 20,
+                "sep 2024": 10,
+                "oct 2024": 20,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 20,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai for customer engagement",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {}
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ai & chatbot customer experience",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ai chatbots for banking",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 10,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ai chatbots in banking",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 0,
+                "may 2024": 10,
+                "jun 2024": 0,
+                "jul 2024": 10,
+                "aug 2024": 10,
+                "sep 2024": 0,
+                "oct 2024": 10,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "ai powered chatbots for insurance sector",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "artificial intelligence customer service chatbot",
+              "avg_monthly_searches": 20,
+              "competition_value": "MEDIUM",
+              "low_cpc": "$4.87",
+              "high_cpc": "$13.46",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 20,
+                "sep 2024": 20,
+                "oct 2024": 20,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 20,
+                "feb 2025": 50
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "banking industry chatbots",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {}
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "benefits of chatbots in insurance",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "best chatbot experience",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "best chatbot for customer support",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatbot benefits for customer service",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatbot for insurance industry",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatbot for telecom",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatbots in telecom",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 10,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "chatbots replacing customer service",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 10,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai for customer experience",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai in ecommerce",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 0,
+                "jun 2024": 10,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 10,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational ai in telecom",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "conversational chatbot platform for ecommerce",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 0,
+                "nov 2024": 10,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer service ai chatbot for websites",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer service ai chatbot solution",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 10,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer service ai chatbot solution for websites",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer service chatbot platform",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer service chatbot solution",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 10,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer support ai chatbot service",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer support ai chatbot service for websites",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer support ai chatbot solution",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer support automation with chatbots",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {}
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer support chatbot platform",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer support chatbot service",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "customer support chatbot with ml",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "insurance ai chatbots",
+              "avg_monthly_searches": 10,
+              "competition_value": "LOW",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 0,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "insurance conversational ai",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "insurance industry chatbots",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "nanorep chatbot",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 0,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai chatbots customer service",
+              "geo": "sg",
+              "keyword": "telecom chatbots",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 10,
+                "apr 2024": 10,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 10,
+                "aug 2024": 10,
+                "sep 2024": 10,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 0
+              }
+            }
+          ],
+          "user_id": "s@gmail.com",
+          "seed_concept": "AI for business ",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "stats": [
+            {
+              "topic_delocalised": "ai software for business automation",
+              "very_low_band": "1",
+              "count_keyword": 1,
+              "UNSPECIFIED_competition": "1",
+              "topic_validity": "insufficient",
+              "unspecifiedRatio": 1,
+              "opportunityRatio": 0,
+              "veryLowRatio": 1
+            }
+          ],
+          "seo_keywords": [
+            {
+              "topic_delocalised": "ai software for business automation",
+              "geo": "sg",
+              "keyword": "ai software for business automation",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {}
+            }
+          ],
+          "user_id": "s@gmail.com",
+          "seed_concept": "AI for business ",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "stats": [
+            {
+              "topic_delocalised": "business ai adoption strategies",
+              "very_low_band": "1",
+              "count_keyword": 1,
+              "UNSPECIFIED_competition": "1",
+              "topic_validity": "insufficient",
+              "unspecifiedRatio": 1,
+              "opportunityRatio": 0,
+              "veryLowRatio": 1
+            }
+          ],
+          "seo_keywords": [
+            {
+              "topic_delocalised": "business ai adoption strategies",
+              "geo": "sg",
+              "keyword": "business ai adoption strategies",
+              "avg_monthly_searches": 0,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {}
+            }
+          ],
+          "user_id": "s@gmail.com",
+          "seed_concept": "AI for business ",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "stats": [
+            {
+              "topic_delocalised": "ai-driven business intelligence",
+              "very_low_band": "2",
+              "count_keyword": 2,
+              "UNSPECIFIED_competition": "1",
+              "MEDIUM_competition": "1",
+              "topic_validity": "insufficient",
+              "unspecifiedRatio": 0.5,
+              "opportunityRatio": 0.5,
+              "veryLowRatio": 1
+            }
+          ],
+          "seo_keywords": [
+            {
+              "topic_delocalised": "ai-driven business intelligence",
+              "geo": "sg",
+              "keyword": "ai driven business intelligence",
+              "avg_monthly_searches": 10,
+              "competition_value": "UNSPECIFIED",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 0,
+                "jun 2024": 0,
+                "jul 2024": 0,
+                "aug 2024": 0,
+                "sep 2024": 10,
+                "oct 2024": 0,
+                "nov 2024": 0,
+                "dec 2024": 0,
+                "jan 2025": 0,
+                "feb 2025": 0
+              }
+            },
+            {
+              "topic_delocalised": "ai-driven business intelligence",
+              "geo": "sg",
+              "keyword": "ai driven companies",
+              "avg_monthly_searches": 10,
+              "competition_value": "MEDIUM",
+              "low_cpc": "$0.00",
+              "high_cpc": "$0.00",
+              "date": {
+                "mar 2024": 0,
+                "apr 2024": 0,
+                "may 2024": 10,
+                "jun 2024": 10,
+                "jul 2024": 0,
+                "aug 2024": 10,
+                "sep 2024": 0,
+                "oct 2024": 10,
+                "nov 2024": 10,
+                "dec 2024": 0,
+                "jan 2025": 10,
+                "feb 2025": 10
+              }
+            }
+          ],
+          "user_id": "s@gmail.com",
+          "seed_concept": "AI for business ",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Get Stats": {
+      "main": [
+        [
+          {
+            "node": "Update topics with stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Insufficient Topics": {
+      "main": [
+        [
+          {
+            "node": "Aggregate topics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate topics": {
+      "main": [
+        [
+          {
+            "node": "Create Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Payload": {
+      "main": [
+        []
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "Update topics with stats": {
+      "main": [
+        [
+          {
+            "node": "Filter Insufficient Topics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Invalid Topics": {
+      "main": [
+        [
+          {
+            "node": "Get Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "afa0185a-1c6f-40e1-8b1e-52033883cf73",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8cd025641d0a304f6f130037959eadd9acc784c66d5d94116c46d55f88b6f30f"
+  },
+  "id": "iabQk5hwNQ05YF7Y",
+  "tags": [
+    {
+      "createdAt": "2025-03-26T04:38:26.113Z",
+      "updatedAt": "2025-03-26T04:38:26.113Z",
+      "id": "gkC9mpy7wqOkEpid",
+      "name": "SEO"
+    },
+    {
+      "createdAt": "2025-03-26T06:13:27.248Z",
+      "updatedAt": "2025-03-26T06:13:27.248Z",
+      "id": "i27H8fqPeB5mUuFo",
+      "name": "v1"
+    },
+    {
+      "createdAt": "2025-03-28T05:54:48.010Z",
+      "updatedAt": "2025-03-28T05:54:48.010Z",
+      "id": "uTVG5jrLglIXoFYe",
+      "name": "helper"
+    }
+  ]
+}
