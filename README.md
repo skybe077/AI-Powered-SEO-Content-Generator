@@ -27,7 +27,7 @@ Built over 30 days (Mar–Apr 2025) as a proof-of-concept for intelligent, modul
 
 🧱 System Architecture
 
-![AI-Powered SEO Content Generator System Architecture](../images/sys_architecture.png)
+![AI-Powered SEO Content Generator System Architecture](../main/images/sys_architecture.png)
 
 
 ---
