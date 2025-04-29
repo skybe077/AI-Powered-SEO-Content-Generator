@@ -74,6 +74,8 @@ AI-Powered-SEO-Content-Generator/
 │
 ├── README.md
 │
+├── retrospective/
+│
 ├── workflows/
 │   ├── n8n
 │   │ 	├──	topic-expander.json
