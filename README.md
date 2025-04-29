@@ -80,6 +80,7 @@ AI-Powered-SEO-Content-Generator/
 │   │ 	├──	seo-agent.json
 │   │ 	├──	content-writer.json
 │   │ 	└── ...	
+│   │
 │	└── appsmith/
 │   	└── content-generator-app.json
 │
