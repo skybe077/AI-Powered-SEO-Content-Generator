@@ -41,7 +41,6 @@ Built over 30 days (Mar–Apr 2025) as a proof-of-concept for intelligent, modul
 | `Keyword_Categorizer` | Classifies keywords as `priority`, `cluster`, `long-tail`, or `ignore` |
 | `Content_Planner` | Groups keywords into pillar + clusters |
 | `Content_Generator` | Writes full article using outline + keywords |
-| `SEO_Review_Results` | Summarizes cluster performance and keyword gaps |
 
 ---
 
