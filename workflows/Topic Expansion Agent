@@ -1,0 +1,957 @@
+{
+  "name": "Topic Expansion Agent - v4",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {
+          "temperature": 0.8
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        880,
+        -320
+      ],
+      "id": "74381582-cbff-485d-9d05-2be13b3cf6f2",
+      "name": "OpenAI Chat Model",
+      "notesInFlow": false,
+      "credentials": {
+        "openAiApi": {
+          "id": "9eMoPi1uSsfDFA76",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6cbe3b13-f5d8-47c3-8f6b-1da788c9b763",
+              "name": "prompt",
+              "value": "=Role: You are an SEO keyword strategist and search-intent translator.\n\nTask: Rewrite the following seed concept into {{ $json.topic_volume }} SEO-friendly search keyword phrases that reflect how users actually search online for \"{{ $json.geo_label }}\". These will be used in keyword tools like Ahrefs or Semrush. \n\nPhrase: \"{{ $json.seed_concept }}\" \n\nGuidelines:\n- Use plain, user-first language — no enterprise or jargon-heavy phrasing\n- Avoid filler/preposition words like: \"for\", \"using\", \"with\", \"by\", \"through\", \"in\", \"via\", \"on\", \"to\", \"of\" unless essential\n- Each topic should be under 7 words\n- Do **not** include descriptors like \"software\", \"solution\", \"platform\", \"system\" unless they clearly add value\n- Do **not** include year-based terms like \"2024\", \"2025\" unless context demands recency (e.g. trends, reports)\n- Prefer natural search queries over content titles\n- Use lowercase only\n- Each topic must be distinct from any of the following:  \n  - Already excluded: {{ $json.exclude_topics.join(\", \") }}  \n  - Already in DB: {{ $json.topics_in_db.join(\", \") }}\n\nReturn only raw JSON in the following format:\n[\n  {\n    \"topic\": \"the version with location/audience qualifiers, for user display\",\n    \"topic_delocalised\": \"the version with all qualifiers removed, for SEO API lookup\",\n    \"usefulness\": \"1 sentence explaining the commercial or search value of this topic\"\n  }\n]\n\nDo not include any commentary, markdown formatting, or newlines. Only valid JSON.\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        -520
+      ],
+      "id": "b8f3db5c-30ae-49b1-a7f0-7b0e395e073e",
+      "name": "Create Prompt"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        860,
+        -520
+      ],
+      "id": "4254ab75-9554-4c1f-b966-bbcaed83d7d7",
+      "name": "Expand on Seed Concept"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "topic_ideas",
+          "mode": "list",
+          "cachedResultName": "topic_ideas"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {
+            "xata_createdat": "2025-03-26T16:18:27",
+            "topic": "={{ $json.topic }}",
+            "seed_concept": "={{ $json.seed_concept }}",
+            "usefulness": "={{ $json.usefulness }}",
+            "xata_version": 0
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "xata_version",
+              "displayName": "xata_version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "xata_createdat",
+              "displayName": "xata_createdat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "xata_updatedat",
+              "displayName": "xata_updatedat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "xata_id",
+              "displayName": "xata_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "topic",
+              "displayName": "topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "usefulness",
+              "displayName": "usefulness",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "seed_concept",
+              "displayName": "seed_concept",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "topic_delocalised",
+              "displayName": "topic_delocalised",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "geo",
+              "displayName": "geo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "count_keyword",
+              "displayName": "count_keyword",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "topic_validity",
+              "displayName": "topic_validity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "unspecifiedRatio",
+              "displayName": "unspecifiedRatio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "opportunityRatio",
+              "displayName": "opportunityRatio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "veryLowRatio",
+              "displayName": "veryLowRatio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "geo_label",
+              "displayName": "geo_label",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "type",
+              "displayName": "type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1820,
+        -420
+      ],
+      "id": "7fba1fec-a124-4f35-988f-97645faabbcf",
+      "name": "Insert into Xata",
+      "credentials": {
+        "postgres": {
+          "id": "gHDVg0wQVPiBMdAw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1ba5a55d-8851-4908-a1e0-373b0b77cd3d",
+              "name": "topic",
+              "value": "={{ $json.topic }}",
+              "type": "string"
+            },
+            {
+              "id": "fe97236b-80a0-4571-b8c1-a3e629240104",
+              "name": "topic_delocalised",
+              "value": "={{ $json.topic_delocalised }}",
+              "type": "string"
+            },
+            {
+              "id": "e75b8fa8-b656-44c0-a8b1-be61bd6cdbd2",
+              "name": "usefulness",
+              "value": "={{ $json.usefulness }}",
+              "type": "string"
+            },
+            {
+              "id": "f4350d3a-a25c-4e17-af81-5f05eb5b5f7b",
+              "name": "seed_concept",
+              "value": "={{ $('Topic Expander Request').item.json.seed_concept }}",
+              "type": "string"
+            },
+            {
+              "id": "6fce4da0-7694-4d56-8f13-876bc3db4fe9",
+              "name": "geo",
+              "value": "={{ $('Topic Expander Request').item.json.geo }}",
+              "type": "string"
+            },
+            {
+              "id": "38f5bb07-37c1-4742-944f-89b6507f6c50",
+              "name": "geo_label",
+              "value": "={{ $('Topic Expander Request').item.json.geo_label }}",
+              "type": "string"
+            },
+            {
+              "id": "b80c52ce-304d-4d2e-b7fc-db98ce679c23",
+              "name": "user_id",
+              "value": "={{ $('Topic Expander Request').item.json.user_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b71ca360-f09a-4c74-8acd-be69d33bd46d",
+              "name": "type",
+              "value": "={{ $('Topic Expander Request').item.json.type }}",
+              "type": "string"
+            },
+            {
+              "id": "a5293ea7-18cd-4d73-8fc5-3a37486550da",
+              "name": "regen_loop",
+              "value": "={{ $('Topic Expander Request').item.json.regen_loop }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1420,
+        -520
+      ],
+      "id": "48adb65b-6a0b-4684-a2a9-d732a8593d87",
+      "name": "Add metadata to each result from LLM"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "topic_ideas",
+          "mode": "list",
+          "cachedResultName": "topic_ideas"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "geo",
+              "value": "={{ $json.geo }}"
+            },
+            {
+              "column": "user_id",
+              "value": "={{ $json.user_id }}"
+            },
+            {
+              "column": "seed_concept",
+              "value": "={{ $json.seed_concept }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        500,
+        80
+      ],
+      "id": "609c16d9-951f-4685-87f6-6434b3eddf43",
+      "name": "Select Topics",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "gHDVg0wQVPiBMdAw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "topic_delocalised"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        700,
+        80
+      ],
+      "id": "1d2847e2-5473-4405-94ef-dbe6c336f678",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        500,
+        -520
+      ],
+      "id": "97d6f53e-a0f9-42eb-8557-7f95d0182780",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "15f75140-64da-44b9-bae4-63098b635a12",
+              "leftValue": "={{ $json.continue_expansion }}",
+              "rightValue": "ture",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -160,
+        100
+      ],
+      "id": "9876bc5c-9c13-43a2-843a-f27217f1cc7b",
+      "name": "If",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "582d092d-cfe5-47f7-a590-e1689709e500",
+              "name": "type",
+              "value": "={{ $('Topic Expander Request').first().json.type }}",
+              "type": "string"
+            },
+            {
+              "id": "e61f6545-52ab-4227-b897-889636e7ae57",
+              "name": "regen_loop",
+              "value": "={{ $('Topic Expander Request').first().json.regen_loop }}",
+              "type": "number"
+            },
+            {
+              "id": "c8d6a060-265f-47f2-814c-2760a4d5b63e",
+              "name": "topic",
+              "value": "={{ $json.topic }}",
+              "type": "string"
+            },
+            {
+              "id": "22ad1228-aa3c-4b61-8b12-8c4612f29200",
+              "name": "seed_concept",
+              "value": "={{ $json.seed_concept }}",
+              "type": "string"
+            },
+            {
+              "id": "985a394a-f2a1-4019-9395-e75720835043",
+              "name": "user_id",
+              "value": "={{ $json.user_id }}",
+              "type": "string"
+            },
+            {
+              "id": "a99af383-44ef-4613-8b54-5b12d4b0e390",
+              "name": "geo",
+              "value": "={{ $json.geo }}",
+              "type": "string"
+            },
+            {
+              "id": "d927c1bd-7a6d-4e51-944a-0e9472c84414",
+              "name": "geo_label",
+              "value": "={{ $json.geo_label }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2020,
+        -420
+      ],
+      "id": "59dd60d0-4385-4c17-9f00-6f9b5bbb1a23",
+      "name": "Controls & Variables"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const regenLoop = item.json.regen_loop;\n  const excludeTopics = item.json.exclude_topics || [];\n\n  let continue_expansion = true;\n\n  if (regenLoop >= 3 || excludeTopics.length === 0) {\n    // Stop if loop too deep or nothing to regenerate\n    continue_expansion = false;\n  }\n\n  // But allow initial pass\n  if (regenLoop === 0 && excludeTopics.length === 0) {\n    continue_expansion = true;\n  }\n\n  item.json.continue_expansion = continue_expansion;\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        100
+      ],
+      "id": "9a5eae27-19b7-4179-b30c-a7121c580e29",
+      "name": "Continue to Expand Topics?"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b12c16e4-1946-456d-811a-b7d8f334b79e",
+              "name": "Response Code",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "f3843a62-4600-4eb4-a638-54b5c2a3daa8",
+              "name": "Response Mode",
+              "value": "Last Node",
+              "type": "string"
+            },
+            {
+              "id": "213cd138-23c6-4baa-b816-8ea56420bb61",
+              "name": "status",
+              "value": "Stopped",
+              "type": "string"
+            },
+            {
+              "id": "fe118199-4006-4096-b1d3-4f40d6dee7c8",
+              "name": "message",
+              "value": "\"No valid topics to expand. Workflow exited.\"",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        120
+      ],
+      "id": "e08bf2a2-2d06-4d3e-ac5a-8ed8a55c8c3c",
+      "name": "Response: Empty or >= 3 regen_loops"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0bd1cd2b-a9db-476c-91ef-2615e17ed342",
+              "name": "topics_in_db",
+              "value": "={{ $json.topic_delocalised }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        900,
+        80
+      ],
+      "id": "fe4d6c82-231c-4161-a7f1-5f2dff312d0e",
+      "name": "Get Topics in DB"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QQCSOFXFW8L8TeQO",
+          "mode": "list",
+          "cachedResultName": "SEO Agent - v3"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        2200,
+        -420
+      ],
+      "id": "639f34d9-325d-4f06-84fe-f48554cc5dd8",
+      "name": "SEO Agent"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -640,
+        -440
+      ],
+      "id": "59c9dee5-b746-43c1-8a87-3768f9f5d01f",
+      "name": "Topic Expander Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Step 1: Get the raw string (which is a JSON string)\nconst rawString = items[0].json.output;\nconst cleaned = rawString.replace(/```json\\n?/, '').replace(/```$/, '').trim();\n\n// Step 2: Parse the JSON string inside the string\nlet parsedArray;\ntry {\n  return parsedArray = JSON.parse(cleaned);\n} catch (e) {\n  throw new Error(\"Failed to parse double-encoded JSON string: \" + e.message);\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1220,
+        -520
+      ],
+      "id": "63744b28-3e63-48f6-bb10-53badbf96b06",
+      "name": "Parse LLM Output to Json"
+    },
+    {
+      "parameters": {
+        "content": "## 🧠 Topic Expansion Agent – v4\n**Last Updated: 18 Apr 2025**\n\nThis agent takes a vague seed concept (e.g., \"AI in marketing\") and generates SEO-friendly, search-intent-driven topic ideas. It filters out already-used or excluded topics, adds user/geo metadata, and prepares the list for downstream keyword research.\n\n---\n\n#### 🔍 Overview  \nThe agent:\n- Accepts user-submitted seed concepts via AppSmith\n- Checks for duplicates (exclude list + existing DB topics)\n- Generates clean, search-optimized topics using GPT-4o\n- Appends metadata (geo, seed_concept, user_id, etc.)\n- Saves valid topics to Xata\n- Routes output to the SEO Agent for further keyword enrichment\n\n---\n\n### 🧩 Key Features  \n1. Modular prompt creation for GPT  \n2. Deduplication using Xata (`exclude_topics` + `topics_in_db`)  \n3. Regeneration loop with expansion guard  \n4. Direct-to-DB insert (Postgres for Xata)  \n5. Automatic SEO Agent handoff post-expansion\n\n---\n\n### 🔁 Feedback & Regeneration  \n- `regen_loop` counter limits expansion depth (max 3)  \n- Stops expansion if exclude list is empty  \n- Appends loop metadata for topic tracking\n\n---\n\n### 🧪 Inputs  \n- `seed_concept`: Initial user-submitted phrase  \n- `geo`, `geo_label`, `user_id`: Location + user context  \n- `exclude_topics[]`: List of previously rejected topic variants  \n- `topics_in_db[]`: DB-matching entries to avoid  \n- `topic_volume`: How many topics to generate  \n- `regen_loop`: Regeneration counter\n\n---\n\n### 📤 Outputs  \nEach topic includes:\n- `topic`, `topic_delocalised`, `usefulness`  \n- Original seed and geo metadata  \n- Regeneration and type tracking  \nSaved to: `topic_ideas` table  \nRouted to: SEO Agent (for keyword research)\n\n---\n\n### 🔧 Stack  \n- n8n  \n- OpenAI GPT-4o  \n- Postgres (Xata-compatible)  \n- AppSmith  \n- SEO Agent",
+        "height": 780,
+        "width": 540
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1740,
+        -720
+      ],
+      "id": "9bab0411-c53b-4df5-bf8b-772c54b3d0c1",
+      "name": "📘 Topic Expansion Agent – README"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 1: Validate Expansion Conditions\n**Purpose**:  \nPre-check whether expansion is allowed based on `regen_loop` and topic availability.\n\n**Logic**:\n- Allow expansion if first pass OR regen_loop < 3  \n- Stop expansion if exclude list is empty  \n- Output: `continue_expansion = true/false`",
+        "height": 460,
+        "width": 700,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -440,
+        -160
+      ],
+      "id": "6ce4eae3-93af-4d07-a808-9d6fb633635f",
+      "name": "🧩 Block 1: Validate Expansion Conditions"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 2: Fetch & Filter Topics in DB\n**Purpose**:  \nFetch existing topics from Xata matching the same user, geo, and seed_concept.\n\n**Actions**:\n- Aggregate existing `topic_delocalised` for deduplication\n- Merge these with the exclude list to guide prompt creation",
+        "height": 440,
+        "width": 640,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        460,
+        -140
+      ],
+      "id": "742ccbaf-cb90-4945-b886-513e70b8147d",
+      "name": "🧩 Block 2: Fetch & Filter Topics in DB"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 3: Create & Run LLM Prompt\n**Purpose**:  \nGenerate new, SEO-optimized topic variants based on the seed concept.\n\n**Steps**:\n- Construct GPT prompt with context  \n- Run GPT-4o via LangChain agent  \n- Parse output and clean JSON  \n- Add geo/user/loop metadata",
+        "height": 580,
+        "width": 1120,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        460,
+        -800
+      ],
+      "id": "b643b5cd-4c56-4e78-bb56-78df0f131c15",
+      "name": "🧩 Block 3: Create & Run LLM Prompt"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 4: Store & Route Topics\n**Purpose**:  \nPersist valid topics to DB and send results to SEO Agent.\n\n**Flow**:\n- Write enriched topics to `topic_ideas` table (via Postgres)\n- Set final metadata (e.g., `type`, `regen_loop`)\n- Invoke `SEO Agent` for keyword research",
+        "height": 560,
+        "width": 560,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1760,
+        -680
+      ],
+      "id": "3615a598-88fd-4587-ac80-99606abbc108",
+      "name": "🧩 Block 4: Store & Route Topics"
+    },
+    {
+      "parameters": {
+        "content": "### 🔁 Feedback & Regeneration  \n- `regen_loop` counter limits expansion depth (max 3)  \n- Stops expansion if exclude list is empty  \n- Appends loop metadata for topic tracking\n\n---\n\n### 🧪 Inputs  \n- `seed_concept`: Initial user-submitted phrase  \n- `geo`, `geo_label`, `user_id`: Location + user context  \n- `exclude_topics[]`: List of previously rejected topic variants  \n- `topics_in_db[]`: DB-matching entries to avoid  \n- `topic_volume`: How many topics to generate  \n- `regen_loop`: Regeneration counter\n\n---\n\n### 📤 Outputs  \nEach topic includes:\n- `topic`, `topic_delocalised`, `usefulness`  \n- Original seed and geo metadata  \n- Regeneration and type tracking  \nSaved to: `topic_ideas` table  \nRouted to: SEO Agent (for keyword research)\n\n---\n\n### 🔧 Stack  \n- n8n  \n- OpenAI GPT-4o  \n- Postgres (Xata-compatible)  \n- AppSmith  \n- SEO Agent",
+        "height": 780,
+        "width": 440
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1160,
+        -720
+      ],
+      "id": "1ff5ecad-ea57-4b45-bfc0-6984e7854fe3",
+      "name": "📘 Topic Expansion Agent – README1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Expand on Seed Concept",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Prompt": {
+      "main": [
+        [
+          {
+            "node": "Expand on Seed Concept",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Expand on Seed Concept": {
+      "main": [
+        [
+          {
+            "node": "Parse LLM Output to Json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add metadata to each result from LLM": {
+      "main": [
+        [
+          {
+            "node": "Insert into Xata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Topics": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Get Topics in DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Create Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Select Topics",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Response: Empty or >= 3 regen_loops",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert into Xata": {
+      "main": [
+        [
+          {
+            "node": "Controls & Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Controls & Variables": {
+      "main": [
+        [
+          {
+            "node": "SEO Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Continue to Expand Topics?": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Topics in DB": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Topic Expander Request": {
+      "main": [
+        [
+          {
+            "node": "Continue to Expand Topics?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse LLM Output to Json": {
+      "main": [
+        [
+          {
+            "node": "Add metadata to each result from LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "76d8547d-8e64-4151-8f91-007e253ff947",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8cd025641d0a304f6f130037959eadd9acc784c66d5d94116c46d55f88b6f30f"
+  },
+  "id": "KIXVBSpMejWB8WZf",
+  "tags": [
+    {
+      "createdAt": "2025-03-26T04:38:29.860Z",
+      "updatedAt": "2025-03-26T04:38:29.860Z",
+      "id": "DYYo4nmBHXALfuP2",
+      "name": "Concepts"
+    },
+    {
+      "createdAt": "2025-03-26T06:13:04.922Z",
+      "updatedAt": "2025-03-26T06:13:04.922Z",
+      "id": "Gztm45txSzpaohbt",
+      "name": "topic expansion"
+    },
+    {
+      "createdAt": "2025-03-26T04:38:26.113Z",
+      "updatedAt": "2025-03-26T04:38:26.113Z",
+      "id": "gkC9mpy7wqOkEpid",
+      "name": "SEO"
+    },
+    {
+      "createdAt": "2025-04-07T01:14:56.885Z",
+      "updatedAt": "2025-04-07T01:14:56.885Z",
+      "id": "zRFzNEufiEbYCfaR",
+      "name": "v4"
+    }
+  ]
+}
