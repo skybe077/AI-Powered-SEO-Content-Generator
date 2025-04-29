@@ -78,15 +78,21 @@ AI-Powered-SEO-Content-Generator/
 ├── /workflows/
 
 │   ├── topic-expander.json
+
 │   ├── seo-agent.json
+
 │   ├── content-writer.json
+
 │   └── ...
 
 ├── /appsmith/
+
 │   └── content-generator-app.json
 
 ├── /examples/
+
 │   ├── input-output-seed-to-article.md
+
 │   └── keyword-categorization-sample.json
 
 ├── /docs/
