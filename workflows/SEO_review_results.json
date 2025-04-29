@@ -1,0 +1,609 @@
+{
+  "name": "SEO: Review Results - v2",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        200,
+        540
+      ],
+      "id": "212d34f6-a6a4-49cf-be11-cda2263d4c6c",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "=result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        420,
+        600
+      ],
+      "id": "f5e1b1f4-7061-4f29-afaa-f383fee5eb1b",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1940,
+        1040
+      ],
+      "id": "8eb9f8ff-185a-41c1-b3a1-302998f0f13c",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "content": "## Delocalised Topics from SEO results. \nThe very first entry is always the Delocalised Topic for the Concept. ",
+        "height": 340,
+        "width": 520,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        360,
+        -480
+      ],
+      "id": "aea59147-7479-43fb-92bc-2400569d80f5",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4753e456-2d22-4b9c-9afc-913d7ff8c0ae",
+              "name": "topic_delocalised",
+              "value": "={{$('From SEO Agent').first().json.topic_delocalised}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        580,
+        -320
+      ],
+      "id": "3ad7c54f-e77e-454e-8d95-739c64cb3ba3",
+      "name": "Get delocalised topics"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "field": "keyword"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        960,
+        620
+      ],
+      "id": "8406c05e-905b-47d2-819e-2ca0fcda4132",
+      "name": "Count Keywords"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "field": "keyword"
+            }
+          ]
+        },
+        "fieldsToSplitBy": "competition_value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        960
+      ],
+      "id": "8b213434-2695-4f6c-a067-628647a4e9fa",
+      "name": "Count Competition"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = {};\n\nfor (const item of items) {\n  const key = item.json.competition_value+\"_competition\";\n  const value = item.json.count_keyword.toString(); // ensure it's a string\n  output[key] = value;\n}\n\nreturn [{ json: output }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1160,
+        960
+      ],
+      "id": "1b762220-078c-43ec-8db1-aa162b4e7fd3",
+      "name": "Flatten Competition"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const avg = item.json.avg_monthly_searches;\n\n  let band = \"unknown\";\n  if (avg <= 10) band = \"very_low\";\n  else if (avg <= 100) band = \"low\";\n  else if (avg <= 1000) band = \"medium\";\n  else if (avg <= 10000) band = \"high\";\n  else band = \"very_high\";\n\n  return {\n    json: {\n      ...item.json,\n      search_vol_band: band\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        260
+      ],
+      "id": "cb9d9d2d-87e6-4ae0-90fa-e77f39b65f16",
+      "name": "Bucket Monthly Search Vol"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "field": "search_vol_band"
+            }
+          ]
+        },
+        "fieldsToSplitBy": "search_vol_band",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        1200,
+        260
+      ],
+      "id": "95ef3952-5226-42ca-bf22-61f13797abb6",
+      "name": "Count of Search Vol Band"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = {};\n\nfor (const item of items) {\n  const key = item.json.search_vol_band+\"_band\";\n  const value = item.json.count_search_vol_band.toString(); // ensure it's a string\n  output[key] = value;\n}\n\nreturn [{ json: output }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1420,
+        260
+      ],
+      "id": "4f40c003-f511-433f-9f71-a3a3b0143a3d",
+      "name": "Flatten Search Vol Band"
+    },
+    {
+      "parameters": {
+        "content": "## Search Volume Band Rules\n1. avg <= 10: band = \"very_low\"\n2. avg <= 100: band = \"low\"\n3. avg <= 1,000: band = \"medium\"\n4. avg <= 10,000: band = \"high\"\n5. avg > 10,000: band = \"very_high\"",
+        "height": 320,
+        "width": 340,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        160
+      ],
+      "id": "0f8bccf3-cfb0-4874-a1eb-70278e1504d4",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Calculate Keyword count\nCounts the number of keywords for this topic ",
+        "height": 240,
+        "width": 540,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        860,
+        520
+      ],
+      "id": "1698745c-1ded-48cb-9820-6fe1ebc8f3dc",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Calculate Competition count\nCount number of keywords for a competition value. These values indicate the ranking difficulty of a keyword  \nValues: Unspecified, Low, Medium, High",
+        "height": 300,
+        "width": 540,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        860,
+        840
+      ],
+      "id": "d792c851-e326-4082-bc85-bb0518df23e5",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Run Topic Validation Rules on Summary Stats\nFor return to calling workflow",
+        "height": 340,
+        "width": 660,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        -440
+      ],
+      "id": "801b69ac-9f38-44e0-b047-6561e4d1d953",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1280,
+        -300
+      ],
+      "id": "708b0279-209c-4cb2-a335-ab40c1dc73b2",
+      "name": "Merge stats"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const data = item.json;\n\n  const low = parseInt(data.LOW_competition || 0);\n  const medium = parseInt(data.MEDIUM_competition || 0);\n  const unspecified = parseInt(data.UNSPECIFIED_competition || 0);\n  const total = parseInt(data.count_keyword || 0);\n  \n  const veryLowBand = parseInt(data.very_low_band || 0);\n  const lowBand = parseInt(data.low_band || 0);\n  const mediumBand = parseInt(data.medium_band || 0);\n  const highBand = parseInt(data.high_band || 0);\n  \n  const unspecifiedRatio = total > 0 ? unspecified / total : 0;\n  const opportunityRatio = total > 0 ? (low + medium) / total : 0;\n  const veryLowRatio = total > 0 ? veryLowBand / total : 0;\n\n  const unspecified_ratio_threshold = $('Thresholds').first().json.unspecified_ratio_threshold\n  const very_low_vol_ratio_threshold = $('Thresholds').first().json.very_low_vol_ratio_threshold\n  const oppty_ratio_threshold = $('Thresholds').first().json.oppty_ratio_threshold\n  const kw_vol_threshold = $('Thresholds').first().json.kw_vol_threshold\n  \n  let label = \"opportunity\"; // default\n\n  if (total < kw_vol_threshold) {\n    label = \"insufficient\";\n  } else if (unspecifiedRatio >= unspecified_ratio_threshold && total >= kw_vol_threshold) {\n    label = \"unknown_opportunity\";\n  } else if (unspecifiedRatio >= unspecified_ratio_threshold && total < kw_vol_threshold) {\n    label = \"unknown_risky\";\n  } else if (veryLowRatio >= very_low_vol_ratio_threshold) {\n    label = \"low_volume_risky\";\n  } else if (opportunityRatio >= oppty_ratio_threshold) {\n    label = \"opportunity\";\n  }\n\n  return {\n    json: {\n      ...data,\n      topic_validity: label,\n      unspecifiedRatio: unspecifiedRatio,\n      opportunityRatio: opportunityRatio,\n      veryLowRatio: veryLowRatio\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1500,
+        -300
+      ],
+      "id": "e3dbc4ff-c55a-41cc-b212-9cb08855bc48",
+      "name": "Topic Validation"
+    },
+    {
+      "parameters": {
+        "content": "## Topic Validity Rules\n1 Apr 2025 \n\n1. Opportunity: Good spread of LOW+MEDIUM keywords.\nKW > 50, (Low + Med KW)/KW > 50%\n2. Insufficient: Too few keywords to be used. \nKW < 50\n3. Unknown_opportunity: Emerging area. \nKW > 50, Unspecified_Ratio > 80%\n4. unknown_risky: Too little data and not enough keywords\nKW < 50, Unspecified_Ratio > 80%\n5. low_volume_risky: \nKW > 50, Low_Volume_Ratio > 80%\n\n### Changes \n1. Arbitrary rules threshold\n",
+        "height": 500,
+        "width": 340,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -540,
+        220
+      ],
+      "id": "99aef1c8-008f-48b0-a48c-7cae7c3608d7",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Calculate Summary Stats for each Topic\nLoop over each item in the JSON to extract summary stats about it. We use the summary stats to determine of a topic is valid or not. ",
+        "height": 1220,
+        "width": 1980,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        100,
+        80
+      ],
+      "id": "dbf6c15f-2527-493a-9114-6c60b8210a13",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Calculate Search Volume by Bands\nGet frequency of each search volume band. \n",
+        "height": 320,
+        "width": 720,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        860,
+        160
+      ],
+      "id": "23dc86da-6e12-4b4d-aaba-160343a03581",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## Summary Stats Rundown\n1. Search volume by bands: Determines the number of eyeballs for this topic.\n2. Keyword Count: Whether a topic has enough keywords to create SEO Content for \n3. Competition count: Determines the amount of competition for this topic. NB: Unspecified competition could be either opportunity or risk (depending on KW vol)",
+        "height": 200,
+        "width": 400,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        120,
+        180
+      ],
+      "id": "5b52a401-b9ed-49be-ab49-4d1831c158f0",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n\n\"unspecified_ratio_threshold\": \n\"0.8\",\n\"kw_vol_threshold\": \n\"15\",\n\"oppty_ratio_threshold\": \n\"0.5\",\n\"very_low_vol_ratio_threshold\": \n\"0.8\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        -320
+      ],
+      "id": "ce1d2ce3-65db-4214-a09b-4a5c3bd1ce1c",
+      "name": "Thresholds"
+    },
+    {
+      "parameters": {
+        "content": "## Set Constants in rule making\n ",
+        "height": 340,
+        "width": 360,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        -480
+      ],
+      "id": "a873017e-6111-4e0a-966b-ca0b5547421f",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -500,
+        20
+      ],
+      "id": "75a204e3-88c1-4abb-a8b3-6a336ef00467",
+      "name": "From SEO Agent"
+    },
+    {
+      "parameters": {
+        "content": "## 🧠 SEO: Review Results – v2\n**Last Updated: 18 Apr 2025**\n\nThis helper workflow evaluates keyword results returned from the SEO API and categorises topic viability. It outputs per-topic stats (volume bands, competition levels, keyword counts) and labels each topic based on predefined thresholds.\n\n---\n\n#### 🔍 Overview  \nThe agent:\n- Splits keywords by topic\n- Buckets keywords by search volume band (e.g. very_low, high)\n- Counts total keywords and segments them by competition value\n- Flattens and merges all stats into one summary object\n- Applies rule-based logic to label topic validity (e.g., opportunity, risky)\n\n---\n\n### 🧩 Key Features  \n1. Extracts delocalised topic metadata  \n2. Splits keyword results into topic units  \n3. Buckets avg search volume into bands  \n4. Counts keyword totals and competition segments  \n5. Computes ratios and applies rule thresholds  \n6. Labels topic with final `topic_validity` classification\n\n---\n\n### 🔁 Feedback Logic  \n- Applies custom thresholds for:\n  - Minimum keyword volume\n  - Unspecified competition ratio\n  - Low-volume keyword ratio\n- Topics are labeled: `opportunity`, `insufficient`, `unknown_opportunity`, `unknown_risky`, `low_volume_risky`\n\n---\n\n### 🧪 Inputs  \n- `result[]`: array of keyword entries per topic  \n- Each keyword should include `avg_monthly_searches` and `competition_value`\n\n---\n\n### 📤 Output  \nEach topic is enriched with:\n- `topic_validity`: label assigned based on rule thresholds  \n- `unspecifiedRatio`, `opportunityRatio`, `veryLowRatio`  \n- Search volume and competition band stats\n\n---\n\n### 🔧 Stack  \n- n8n  \n- No external API calls (pure computation)  \n- Triggered as a subworkflow in SEO Agent",
+        "height": 1440,
+        "width": 620
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1220,
+        -300
+      ],
+      "id": "2dba266c-312a-4734-9fbf-711e44345b2c",
+      "name": "📘 SEO Review Results – README"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Merge stats",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Count Keywords",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Count Competition",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bucket Monthly Search Vol",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get delocalised topics": {
+      "main": [
+        [
+          {
+            "node": "Merge stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Count Keywords": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Count Competition": {
+      "main": [
+        [
+          {
+            "node": "Flatten Competition",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flatten Competition": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Bucket Monthly Search Vol": {
+      "main": [
+        [
+          {
+            "node": "Count of Search Vol Band",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Count of Search Vol Band": {
+      "main": [
+        [
+          {
+            "node": "Flatten Search Vol Band",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flatten Search Vol Band": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge stats": {
+      "main": [
+        [
+          {
+            "node": "Topic Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Thresholds": {
+      "main": [
+        [
+          {
+            "node": "Get delocalised topics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "From SEO Agent": {
+      "main": [
+        [
+          {
+            "node": "Thresholds",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f8784427-f5f4-4070-bf0b-8a633ede3996",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8cd025641d0a304f6f130037959eadd9acc784c66d5d94116c46d55f88b6f30f"
+  },
+  "id": "IboDW3yGpetuJV2w",
+  "tags": [
+    {
+      "createdAt": "2025-03-26T04:38:26.113Z",
+      "updatedAt": "2025-03-26T04:38:26.113Z",
+      "id": "gkC9mpy7wqOkEpid",
+      "name": "SEO"
+    },
+    {
+      "createdAt": "2025-03-27T02:29:23.421Z",
+      "updatedAt": "2025-03-27T02:29:23.421Z",
+      "id": "r3mWin1PnW4qjRWa",
+      "name": "v2"
+    },
+    {
+      "createdAt": "2025-03-27T04:21:44.542Z",
+      "updatedAt": "2025-03-27T04:21:44.542Z",
+      "id": "u4xFsRM5y7a66GnB",
+      "name": "keyword research"
+    },
+    {
+      "createdAt": "2025-03-28T05:54:48.010Z",
+      "updatedAt": "2025-03-28T05:54:48.010Z",
+      "id": "uTVG5jrLglIXoFYe",
+      "name": "helper"
+    }
+  ]
+}
