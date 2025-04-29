@@ -69,36 +69,29 @@ Built over 30 days (Mar–Apr 2025) as a proof-of-concept for intelligent, modul
 
 ## Project Structure 
 
+```plaintext
 AI-Powered-SEO-Content-Generator/
-
 │
-
 ├── README.md
-
-├── /workflows/
-
-│   ├── topic-expander.json
-
-│   ├── seo-agent.json
-
-│   ├── content-writer.json
-
-│   └── ...
-
-├── /appsmith/
-
-│   └── content-generator-app.json
-
-├── /examples/
-
-│   ├── input-output-seed-to-article.md
-
-│   └── keyword-categorization-sample.json
-
-├── /docs/
-│   ├── architecture-diagram.png
+│
+├── workflows/
+│   ├── n8n
+│   │ 	├──	topic-expander.json
+│   │ 	├──	seo-agent.json
+│   │ 	├──	content-writer.json
+│   │ 	└── ...	
+│	└── appsmith/
+│   	└── content-generator-app.json
+│
+├── examples & seeds/
+│   ├── phrases/
+│   ├── topics/
+│   ├── keywords/
+│   ├── categorized_keywords/
+│   ├── outlines/
+│
+├── images/
+│   ├── system_architecture.png
 │   └── prompts.md
-
+│
 └── LICENSE
-
-
