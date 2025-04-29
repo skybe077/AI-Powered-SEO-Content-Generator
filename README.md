@@ -72,20 +72,27 @@ Built over 30 days (Mar–Apr 2025) as a proof-of-concept for intelligent, modul
 
 AI-Powered-SEO-Content-Generator/
 │
+
 ├── README.md
+
 ├── /workflows/
+
 │   ├── topic-expander.json
 │   ├── seo-agent.json
 │   ├── content-writer.json
 │   └── ...
+
 ├── /appsmith/
 │   └── content-generator-app.json
+
 ├── /examples/
 │   ├── input-output-seed-to-article.md
 │   └── keyword-categorization-sample.json
+
 ├── /docs/
 │   ├── architecture-diagram.png
 │   └── prompts.md
+
 └── LICENSE
 
 
