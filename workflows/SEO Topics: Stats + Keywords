@@ -1,0 +1,551 @@
+{
+  "name": "SEO Topics: Stats + Keywords - v1",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://seo-keyword-research-ai.p.rapidapi.com/keyword-research",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "keyword",
+              "value": "={{ $json.topic_delocalised }}"
+            },
+            {
+              "name": "country",
+              "value": "={{ $json.geo }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Rapidapi-Host",
+              "value": "google-seo-keyword-research-ai.p.rapidapi.com"
+            }
+          ]
+        },
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 3500
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        180,
+        200
+      ],
+      "id": "1d2ae8e7-e69c-463e-a8e1-7a1a2965d1e6",
+      "name": "Get SEO Keywords",
+      "alwaysOutputData": false,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "zj9HznQWE1HAGXVr",
+          "name": "Header Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -40,
+        180
+      ],
+      "id": "0a6e2d9f-e698-4474-9243-0427bc1209a5",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(({ json }, index) => {\n  const date = {};\n  \n  for (const vol of json.monthly_search_volumes || []) {\n    const monthShort = vol.month.slice(0, 3).toLowerCase(); // \"jan\"\n    const key = `${monthShort} ${vol.year}`; // \"jan 2025\"\n    date[key] = vol.searches;\n  }\n\n  if ($json.message !== undefined)\n  {\n    return {\n      json: {\n         topic_delocalised: $('Loop Over Items').item.json.topic_delocalised,\n        geo: $('Loop Over Items').item.json.geo,\n        keyword: null,\n        avg_monthly_searches: -1,\n        competition_value: null,\n        low_cpc: -1,\n        high_cpc: -1,\n        date: {}\n      },\n        pairedItem: index\n    };\n    \n  }\n  else {\n   return {\n      json: {\n        topic_delocalised: $('Loop Over Items').item.json.topic_delocalised,\n        geo: $('Loop Over Items').item.json.geo,\n        keyword: json.keyword,\n        avg_monthly_searches: json.avg_monthly_searches,\n        competition_value: json.competition_value,\n        low_cpc: parseFloat(json[\"Low CPC\"].replace(\"$\", \"\")),\n        high_cpc: parseFloat(json[\"High CPC\"].replace(\"$\", \"\")),\n        date\n      },\n      pairedItem: index\n    };\n    \n  }\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        740
+      ],
+      "id": "77639cd6-56b1-4e8d-9383-14d36ce438cb",
+      "name": "Flatten SEO Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d23a674b-b082-4b43-acb5-f4f41fe2d116",
+              "name": "topic_delocalised",
+              "value": "={{$('Loop Over Items').first().json.topic_delocalised}}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        620,
+        200
+      ],
+      "id": "cf7920fb-67b7-4219-8534-763d80afb88e",
+      "name": "Add Topic Delocalised"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1440,
+        820
+      ],
+      "id": "f77a8d93-6485-42cc-a930-701038b9bb4e",
+      "name": "Merge Stats & SEO Keywords into 1 JSON"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "seo_keywords",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        740
+      ],
+      "id": "31b262fb-3a58-4cf6-9e59-ccd45306382a",
+      "name": "Aggregate under 1 field (SEO Keywords)"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "stats",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        200
+      ],
+      "id": "2582c084-d0c0-4d35-92c8-51b800c30ef6",
+      "name": "Aggregate under 1 field (stats)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const result_wrapper = $input.item.json.result;\n\nif (result_wrapper) {\n  return $input.all();\n}\nelse{\n  const input_result = $input.all().map(item => item.json)\n  return [{\n    json: {\n      result: input_result\n    },\n    \"pairedItem\": 0\n  }];\n} \n  "
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        380,
+        200
+      ],
+      "id": "ec829624-9faf-483f-b953-f7f2d2221592",
+      "name": "Wrap API Output under \"Result\""
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "IboDW3yGpetuJV2w",
+          "mode": "list",
+          "cachedResultName": "SEO: Review Results - v2"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        860,
+        200
+      ],
+      "id": "9f35cb03-ec9b-485e-970c-b2583661735e",
+      "name": "Get Topic Stats & Validity"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        680,
+        740
+      ],
+      "id": "9231a572-999e-4828-af8b-f6cfff892668",
+      "name": "Remove Result Header"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -360,
+        -20
+      ],
+      "id": "9ab02203-c92a-4d58-a09a-5034b94d55f1",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -360,
+        180
+      ],
+      "id": "55864202-2aa3-4e4a-ac15-d3822f7dc887",
+      "name": "SEO Stats"
+    },
+    {
+      "parameters": {
+        "content": "## 🧠 SEO Topics + Stats + Keywords – v1\n**Last Updated: 18 Apr 2025**\n\nThis helper workflow combines topic-level SEO keyword lookup and metadata evaluation. It queries the SEO API for keyword volume, CPC, and competition data, then combines the results with topic validity scores from a separate stat-checking agent.\n\n---\n\n#### 🔍 Overview  \nThis agent:\n- Loops through user-submitted topics  \n- Retrieves keywords from the SEO API  \n- Flattens & formats results with CPC and search data  \n- Retrieves topic-level stats (e.g. average search volume, ratios, validity)  \n- Aggregates and merges all data into one JSON payload\n\n---\n\n### 🧩 Key Features  \n1. Calls SEO API with topic + geo  \n2. Cleans and transforms keyword-level results  \n3. Retrieves and appends topic validity stats  \n4. Aggregates results into `seo_keywords[]` and `stats[]`  \n5. Combines both arrays into a single JSON\n\n---\n\n### 🔁 Loops or Feedback  \n- Batch execution via `Loop Over Items`  \n- Retry and rate-limit managed in HTTP node config (`batchSize: 1`, `batchInterval: 3500ms`)\n\n---\n\n### 🧪 Inputs  \n- `topic_delocalised[]`, `geo`: passed from upstream workflow (e.g., SEO Agent)\n\n---\n\n### 📤 Outputs  \nCombined object with:\n- `seo_keywords[]`: keyword-level CPC, volume, and competition  \n- `stats[]`: topic-level validation (volume, ratio, flags)  \n- Final JSON is passed downstream for further enrichment or DB insertion\n\n---\n\n### 🔧 Stack  \n- n8n  \n- RapidAPI (SEO API)  \n- Sub-workflow: `SEO: Review Results - v2`  \n- AppSmith for topic selection and execution",
+        "height": 820,
+        "width": 500
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1420,
+        -80
+      ],
+      "id": "d8de51ca-6239-45b2-8abc-86e9a106ff1f",
+      "name": "📘 SEO Topics + Stats + Keywords – README"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 1: SEO Keyword Lookup\n**Purpose**:  \nLoop over each topic and call the SEO keyword research API with `topic_delocalised` and `geo`.\n\n**Actions**:\n- Batches items to control rate limiting (1 call every 3.5s)\n- Captures keywords, volume, CPC, and competition per topic\n- Wraps response in `result` field for uniform structure",
+        "height": 420,
+        "width": 560,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -60
+      ],
+      "id": "c9b13dfe-a87f-4c66-8109-4e59a7aca021",
+      "name": "🧩 Block 1: SEO Keyword Lookup"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 2: Keyword Cleanup & Flattening\n**Purpose**:  \nStandardise and flatten keyword results, handling both successful and failed responses.\n\n**Actions**:\n- Converts CPC strings to floats\n- Extracts monthly volumes into `date` dictionary\n- Assigns fallback values for failed lookups",
+        "height": 420,
+        "width": 640,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        620,
+        500
+      ],
+      "id": "cb625921-8b5a-4825-a585-00b23a236057",
+      "name": "🧩 Block 2: Keyword Cleanup & Flattening"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 3: Get Topic Stats & Validity\n**Purpose**:  \nRuns subworkflow `SEO: Review Results - v2` to evaluate overall topic performance.\n\n**Actions**:\n- Assesses if topic generated meaningful keyword data\n- Adds flags for low volume or invalid topics\n- Outputs per-topic stats (volume, ratio, validity)",
+        "height": 420,
+        "width": 720,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        560,
+        -60
+      ],
+      "id": "5a98dcb5-44f9-410f-9943-68e5e20ce278",
+      "name": "🧩 Block 3: Get Topic Stats & Validity"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 4: Aggregate & Merge\n**Purpose**:  \nCollect all keyword and stat outputs into structured arrays, then merge for downstream use.\n\n**Actions**:\n- Aggregates `seo_keywords[]`  \n- Aggregates `stats[]`  \n- Combines both into a single merged payload",
+        "height": 500,
+        "width": 300,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        520
+      ],
+      "id": "f4cbec28-bd82-41cf-b5e9-85a855e4a1b3",
+      "name": "🧩 Block 4: Aggregate & Merge"
+    },
+    {
+      "parameters": {
+        "content": "### 🔁 Loops or Feedback  \n- Batch execution via `Loop Over Items`  \n- Retry and rate-limit managed in HTTP node config (`batchSize: 1`, `batchInterval: 3500ms`)\n\n---\n\n### 🧪 Inputs  \n- `topic_delocalised[]`, `geo`: passed from upstream workflow (e.g., SEO Agent)\n\n---\n\n### 📤 Outputs  \nCombined object with:\n- `seo_keywords[]`: keyword-level CPC, volume, and competition  \n- `stats[]`: topic-level validation (volume, ratio, flags)  \n- Final JSON is passed downstream for further enrichment or DB insertion\n\n---\n\n### 🔧 Stack  \n- n8n  \n- RapidAPI (SEO API)  \n- Sub-workflow: `SEO: Review Results - v2`  \n- AppSmith for topic selection and execution",
+        "height": 820,
+        "width": 380
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -80
+      ],
+      "id": "799143b6-5722-4bfe-8107-db47716cbcd2",
+      "name": "📘 SEO Topics + Stats + Keywords – README1"
+    }
+  ],
+  "pinData": {
+    "When clicking ‘Test workflow’": [
+      {
+        "json": {
+          "topic_delocalised": "ai solutions for startups",
+          "geo": "sg"
+        }
+      },
+      {
+        "json": {
+          "topic_delocalised": "ai tools for small businesses",
+          "geo": "sg"
+        }
+      },
+      {
+        "json": {
+          "topic_delocalised": "ai platforms for business growth",
+          "geo": "sg"
+        }
+      },
+      {
+        "json": {
+          "topic_delocalised": "integrating ai in enterprises",
+          "geo": "sg"
+        }
+      },
+      {
+        "json": {
+          "topic_delocalised": "ai marketing tools review",
+          "geo": "sg"
+        }
+      },
+      {
+        "json": {
+          "topic_delocalised": "ai analytics for retail businesses",
+          "geo": "sg"
+        }
+      },
+      {
+        "json": {
+          "topic_delocalised": "ai chatbots customer service",
+          "geo": "sg"
+        }
+      },
+      {
+        "json": {
+          "topic_delocalised": "ai software for business automation",
+          "geo": "sg"
+        }
+      },
+      {
+        "json": {
+          "topic_delocalised": "business ai adoption strategies",
+          "geo": "sg"
+        }
+      },
+      {
+        "json": {
+          "topic_delocalised": "ai-driven business intelligence",
+          "geo": "sg"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Get SEO Keywords": {
+      "main": [
+        [
+          {
+            "node": "Wrap API Output under \"Result\"",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get SEO Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flatten SEO Data": {
+      "main": [
+        [
+          {
+            "node": "Aggregate under 1 field (SEO Keywords)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Topic Delocalised": {
+      "main": [
+        [
+          {
+            "node": "Get Topic Stats & Validity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Stats & SEO Keywords into 1 JSON": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate under 1 field (SEO Keywords)": {
+      "main": [
+        [
+          {
+            "node": "Merge Stats & SEO Keywords into 1 JSON",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Aggregate under 1 field (stats)": {
+      "main": [
+        [
+          {
+            "node": "Merge Stats & SEO Keywords into 1 JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wrap API Output under \"Result\"": {
+      "main": [
+        [
+          {
+            "node": "Add Topic Delocalised",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Remove Result Header",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Topic Stats & Validity": {
+      "main": [
+        [
+          {
+            "node": "Aggregate under 1 field (stats)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Result Header": {
+      "main": [
+        [
+          {
+            "node": "Flatten SEO Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "SEO Stats": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2fcb0c9d-e58c-464a-ba00-6146d5448484",
+  "meta": {
+    "instanceId": "8cd025641d0a304f6f130037959eadd9acc784c66d5d94116c46d55f88b6f30f"
+  },
+  "id": "h8xUzJJNFYNT9SIK",
+  "tags": [
+    {
+      "createdAt": "2025-03-26T04:38:26.113Z",
+      "updatedAt": "2025-03-26T04:38:26.113Z",
+      "id": "gkC9mpy7wqOkEpid",
+      "name": "SEO"
+    },
+    {
+      "createdAt": "2025-03-26T06:13:27.248Z",
+      "updatedAt": "2025-03-26T06:13:27.248Z",
+      "id": "i27H8fqPeB5mUuFo",
+      "name": "v1"
+    },
+    {
+      "createdAt": "2025-03-28T05:54:48.010Z",
+      "updatedAt": "2025-03-28T05:54:48.010Z",
+      "id": "uTVG5jrLglIXoFYe",
+      "name": "helper"
+    }
+  ]
+}
