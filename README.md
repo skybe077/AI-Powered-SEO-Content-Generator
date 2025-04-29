@@ -8,6 +8,7 @@ Built over 30 days (Mar–Apr 2025) as a proof-of-concept for intelligent, modul
 
 ## 🚀 What It Does
 
+
 ✅ Accepts a seed phrase (e.g. `erp for smes`)
 
 ✅ Expands it into SEO-aligned topics using LLMs
@@ -21,4 +22,5 @@ Built over 30 days (Mar–Apr 2025) as a proof-of-concept for intelligent, modul
 ✅ Generates full-length, markdown-formatted articles
 
 ✅ Displays results through a user-facing Appsmith frontend
+
 ---
