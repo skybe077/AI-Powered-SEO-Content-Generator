@@ -24,3 +24,6 @@ Built over 30 days (Mar–Apr 2025) as a proof-of-concept for intelligent, modul
 ✅ Displays results through a user-facing Appsmith frontend
 
 ---
+
+🧱 System Architecture
+![image.png](attachment:f240fb72-e8d5-4b09-8710-373a92b10a32:image.png)
