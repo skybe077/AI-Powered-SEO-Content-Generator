@@ -1,0 +1,694 @@
+{
+  "name": "SEO Agent - v3",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "topic_ideas",
+          "mode": "list",
+          "cachedResultName": "topic_ideas"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "user_id",
+              "value": "={{ $json.user_id }}"
+            },
+            {
+              "column": "seed_concept",
+              "value": "={{ $json.seed_concept }}"
+            },
+            {
+              "column": "geo",
+              "value": "={{ $json.geo }}"
+            },
+            {
+              "column": "topic",
+              "value": "={{ $json.topic }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -360,
+        -220
+      ],
+      "id": "080cb93c-1900-444b-ac6f-9fe0849581ce",
+      "name": "SELECT from Xata",
+      "credentials": {
+        "postgres": {
+          "id": "gHDVg0wQVPiBMdAw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "de3f3dbe-9372-49ec-a74d-792d97a279c5",
+              "name": "topic_delocalised",
+              "value": "={{ $json.topic_delocalised }}",
+              "type": "string"
+            },
+            {
+              "id": "2f0b5785-2c9a-4488-a9e5-c89d28b874cc",
+              "name": "geo",
+              "value": "={{ $json.geo }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -100,
+        -220
+      ],
+      "id": "0711c206-66e0-4dbf-b14f-232366b1679f",
+      "name": "Get Topics & Geo only"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "h8xUzJJNFYNT9SIK",
+          "mode": "list",
+          "cachedResultName": "SEO Topics: Stats + Keywords - v1"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        -220
+      ],
+      "id": "b43dd1c4-d5a5-49b8-bd36-440e633381b6",
+      "name": "Get SEO Keywords"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "09f9559d-fcf5-4208-9dc5-28439e883183",
+              "name": "user_id",
+              "value": "={{ $('Topic Expansion Handover').first().json.user_id }}",
+              "type": "string"
+            },
+            {
+              "id": "28ece345-98d6-4647-844a-7856b72c81c8",
+              "name": "seed_concept",
+              "value": "={{ $('Topic Expansion Handover').first().json.seed_concept }}",
+              "type": "string"
+            },
+            {
+              "id": "0753e25a-24a0-406f-9768-f953cf8c780e",
+              "name": "geo",
+              "value": "={{ $('Topic Expansion Handover').first().json.geo }}",
+              "type": "string"
+            },
+            {
+              "id": "19937c65-93b7-43e7-a6d5-aa56eaf9fed9",
+              "name": "geo_label",
+              "value": "={{ $('Topic Expansion Handover').first().json.geo_label }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        620,
+        -220
+      ],
+      "id": "89d2d49a-af4c-4f21-b988-a2175e161671",
+      "name": "Get Identifying Info"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "iabQk5hwNQ05YF7Y",
+          "mode": "list",
+          "cachedResultName": "Get Invalid Topics - v1"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1140,
+        -500
+      ],
+      "id": "941679c0-d1c3-4cfc-9c9f-a220bb60cea1",
+      "name": "Get Invalid Topics"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -580,
+        -680
+      ],
+      "id": "50b4c024-947c-45c1-9792-90d36c376a41",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "354a0ae4-1a3d-469c-a229-e6fbcbca42fd",
+              "name": "regen_loop",
+              "value": "={{ $('Topic Expansion Handover').first().json.regen_loop +1}}",
+              "type": "number"
+            },
+            {
+              "id": "362c62d9-6414-45e3-9dfe-32d8c88575ed",
+              "name": "type",
+              "value": "=\"regenerate\"",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1400,
+        -500
+      ],
+      "id": "c71a6af4-0326-458a-9207-88f7281c29af",
+      "name": "+1 regen_loop"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -600,
+        -220
+      ],
+      "id": "60903fda-8e01-4aa3-887d-1c139540b214",
+      "name": "Topic Expansion Handover"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "zWulR5pEPEHkCfnT",
+          "mode": "list",
+          "cachedResultName": "Keyword Categoriser - v2"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1160,
+        60
+      ],
+      "id": "faf005d3-835c-4772-8a0a-6463a17e3653",
+      "name": "Categorise Keywords"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "KIXVBSpMejWB8WZf",
+          "mode": "list",
+          "cachedResultName": "Topic Expansion Agent - v4"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1620,
+        -500
+      ],
+      "id": "d53aee29-762a-44ee-acbf-2d7831845271",
+      "name": "Topic Expansion (regen_loop)",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b12c16e4-1946-456d-811a-b7d8f334b79e",
+              "name": "Response Code",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "f3843a62-4600-4eb4-a638-54b5c2a3daa8",
+              "name": "Response Mode",
+              "value": "Last Node for SEO Agent",
+              "type": "string"
+            },
+            {
+              "id": "213cd138-23c6-4baa-b816-8ea56420bb61",
+              "name": "status",
+              "value": "Stopped",
+              "type": "string"
+            },
+            {
+              "id": "fe118199-4006-4096-b1d3-4f40d6dee7c8",
+              "name": "message",
+              "value": "\"No valid topics to expand. Workflow exited.\"",
+              "type": "string"
+            },
+            {
+              "id": "02a8ceb5-d2fc-445e-95df-3533f91cb6ad",
+              "name": "=user_id",
+              "value": "={{ $('Get Identifying Info').first().json.user_id }}",
+              "type": "string"
+            },
+            {
+              "id": "cb36d01c-fa41-467f-a0d9-4e83270894fc",
+              "name": "geo",
+              "value": "={{ $('Get Identifying Info').first().json.geo }}",
+              "type": "string"
+            },
+            {
+              "id": "7121e721-a9de-4286-8acc-f656a3969de3",
+              "name": "seed_concept",
+              "value": "={{ $('Get Identifying Info').first().json.seed_concept }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1460,
+        60
+      ],
+      "id": "3307c1f6-2790-4ac7-9e9c-e02ea830dcc8",
+      "name": "Last Node"
+    },
+    {
+      "parameters": {
+        "content": "### 🔹 Block 1: Retrieve Topics\n**Purpose**: Load user-selected topics from the `topic_ideas` table in Xata via Postgres.\n\n**Inputs**:\n- `user_id`, `seed_concept`, `geo`, `topic`\n\n**Output**:\n- Rows matching the filters, each containing a `topic_delocalised`\n\n**Used in**:\n- Preparation for SEO keyword generation",
+        "height": 460,
+        "width": 720,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        -520
+      ],
+      "id": "66d9bb9b-b71a-4e71-8711-0407486b8a71",
+      "name": "🔹 Block 1: Retrieve Topics"
+    },
+    {
+      "parameters": {
+        "content": "### 🔹 Block 2: Get Keywords from SEO API\n**Purpose**: Call the SEO API to get keyword stats for each topic.\n\n**Flow**:\n1. Topics are passed to the SEO API via a subworkflow (`Get SEO Keywords`)\n2. Outputs include CPC, competition, and search volume data for each keyword\n\n**Output**:\n- A structured array of keywords per topic\n\n**Note**: This node can be modularised into a helper workflow",
+        "height": 460,
+        "width": 700,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        -540
+      ],
+      "id": "9fff959c-d8af-44b6-be0e-43763ebf646e",
+      "name": "🔹 Block 2: Get Keywords from SEO API"
+    },
+    {
+      "parameters": {
+        "content": "### 🔹 Block 3: Check for Weak Topics\n**Purpose**: Identify topics with insufficient keyword data and prepare for regeneration.\n\n**Flow**:\n1. Run subworkflow `Find Insufficient Topics`\n2. Increment `regen_loop` counter\n3. Send weak topics to `Topic Expansion Agent`\n\n**Output**:\n- New topics with revised phrasings for retry\n\n**Used in**:\n- Feedback loop for SEO quality control",
+        "height": 540,
+        "width": 760,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        -820
+      ],
+      "id": "ed3b79e3-8616-4b78-8c7d-c5d60bcd2ea5",
+      "name": "🔹 Block 3: Check for Weak Topics"
+    },
+    {
+      "parameters": {
+        "content": "### 🔹 Block 4: Categorise & Store Keywords\n**Purpose**:\nSend keywords to the `Keyword Categoriser` agent, categorise each, and save the results to Xata.\n\n**Steps**:\n1. Send to `Keyword Categoriser - v2` (categorisation via LLM)\n2. Collect metadata, assign final status\n3. Optionally send an end-of-process response back to UI or downstream agents\n\n**Output**:\n- Structured keywords with category and reason\n- Marked process complete with user/session metadata",
+        "height": 480,
+        "width": 740,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        -220
+      ],
+      "id": "51fad1e5-534f-4e23-9f0d-ead27df1579a",
+      "name": "🔹 Block 4: Categorise & Store Keywords"
+    },
+    {
+      "parameters": {
+        "content": "## 🧠 SEO Agent – v3\n**Last Updated: 18 Apr 2025**\n\nThis n8n agent performs automated SEO keyword research for a list of delocalised topics. It enriches each topic with keyword-level metrics, validates their usefulness, and triggers further regeneration if needed. It is part of a multi-agent SEO workflow, closely integrated with AppSmith.\n\n---\n\n#### 🔍 Overview  \nThis agent takes user-submitted topics and:\n- Sends each to an external SEO keyword API\n- Retrieves keyword metrics: CPC, competition, and search volume\n- Flags topics with low/no keyword performance\n- Sends valid keywords to the Keyword Categoriser Agent\n- Regenerates underperforming topics via the Topic Expansion Agent\n\n---\n\n### 🧩 Key Features\n1. Loads user-submitted topic list from `topic_ideas` table\n2. Enriches topics with keywords via SEO API\n3. Evaluates topic viability (based on keyword stats)\n4. Forwards valid results to categorisation pipeline\n5. Routes insufficient topics into feedback regeneration\n\n---\n\n### 🔁 Feedback & Regeneration\n- Triggers topic expansion for topics with low or no keyword yield\n- Prevents duplication via overlap checks\n- Tracks retry state using `regen_loop` and `type=regenerate`\n\n---\n\n### 🧪 Inputs\n- `topic_delocalised[]`: User-selected topics\n- `geo`: Location filter (e.g. `sg`)\n- `seed_concept`, `user_id`, `geo_label`: Metadata for feedback and regeneration\n\n---\n\n### 📤 Output\nFor each topic:\n- List of keywords with `volume`, `competition_value`, `low_cpc`, `high_cpc`\n- Weak topics flagged for regeneration\n- Categorised keywords passed to `topic_keywords` DB via downstream agents\n\n---\n\n### 🔧 Stack\n- n8n for orchestration\n- External SEO API via RapidAPI\n- Keyword Categoriser + Topic Expansion sub-agents\n- Postgres (Xata structure)\n- AppSmith UI",
+        "height": 940,
+        "width": 520
+      },
+      "name": "📘 SEO Agent README",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1720,
+        -640
+      ],
+      "id": "fb5163af-d9a2-4b32-aa0b-cb73ecbec747"
+    },
+    {
+      "parameters": {
+        "content": "### 🧪 Inputs\n- `topic_delocalised[]`: User-selected topics\n- `geo`: Location filter (e.g. `sg`)\n- `seed_concept`, `user_id`, `geo_label`: Metadata for feedback and regeneration\n\n---\n\n### 📤 Output\nFor each topic:\n- List of keywords with `volume`, `competition_value`, `low_cpc`, `high_cpc`\n- Weak topics flagged for regeneration\n- Categorised keywords passed to `topic_keywords` DB via downstream agents\n\n---\n\n### 🔧 Stack\n- n8n for orchestration\n- External SEO API via RapidAPI\n- Keyword Categoriser + Topic Expansion sub-agents\n- Postgres (Xata structure)\n- AppSmith UI",
+        "height": 940,
+        "width": 420
+      },
+      "name": "📘 SEO Agent README1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1160,
+        -640
+      ],
+      "id": "f36bda1b-481e-47c1-a7e5-4f86ffcc3c2a"
+    }
+  ],
+  "pinData": {
+    "When clicking ‘Test workflow’": [
+      {
+        "json": {
+          "type": "original",
+          "regen_loop": 0,
+          "topic": "ai solutions for sg startups",
+          "seed_concept": "AI for business ",
+          "user_id": "s@gmail.com",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "type": "original",
+          "regen_loop": 0,
+          "topic": "ai tools for sg small businesses",
+          "seed_concept": "AI for business ",
+          "user_id": "s@gmail.com",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "type": "original",
+          "regen_loop": 0,
+          "topic": "sg ai platforms for business growth",
+          "seed_concept": "AI for business ",
+          "user_id": "s@gmail.com",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "type": "original",
+          "regen_loop": 0,
+          "topic": "integrating ai in sg enterprises",
+          "seed_concept": "AI for business ",
+          "user_id": "s@gmail.com",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "type": "original",
+          "regen_loop": 0,
+          "topic": "sg ai marketing tools review",
+          "seed_concept": "AI for business ",
+          "user_id": "s@gmail.com",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "type": "original",
+          "regen_loop": 0,
+          "topic": "ai analytics for sg retail businesses",
+          "seed_concept": "AI for business ",
+          "user_id": "s@gmail.com",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "type": "original",
+          "regen_loop": 0,
+          "topic": "ai chatbots sg customer service",
+          "seed_concept": "AI for business ",
+          "user_id": "s@gmail.com",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "type": "original",
+          "regen_loop": 0,
+          "topic": "sg ai software for business automation",
+          "seed_concept": "AI for business ",
+          "user_id": "s@gmail.com",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "type": "original",
+          "regen_loop": 0,
+          "topic": "sg business ai adoption strategies",
+          "seed_concept": "AI for business ",
+          "user_id": "s@gmail.com",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      },
+      {
+        "json": {
+          "type": "original",
+          "regen_loop": 0,
+          "topic": "ai-driven sg business intelligence",
+          "seed_concept": "AI for business ",
+          "user_id": "s@gmail.com",
+          "geo": "sg",
+          "geo_label": "Singapore"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "SELECT from Xata": {
+      "main": [
+        [
+          {
+            "node": "Get Topics & Geo only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Topics & Geo only": {
+      "main": [
+        [
+          {
+            "node": "Get SEO Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get SEO Keywords": {
+      "main": [
+        [
+          {
+            "node": "Get Identifying Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Identifying Info": {
+      "main": [
+        [
+          {
+            "node": "Get Invalid Topics",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Categorise Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "Get Invalid Topics": {
+      "main": [
+        [
+          {
+            "node": "+1 regen_loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "+1 regen_loop": {
+      "main": [
+        [
+          {
+            "node": "Topic Expansion (regen_loop)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Topic Expansion Handover": {
+      "main": [
+        [
+          {
+            "node": "SELECT from Xata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Categorise Keywords": {
+      "main": [
+        [
+          {
+            "node": "Last Node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "724dd60f-a9e7-48c8-9c41-778bfd3a8f74",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8cd025641d0a304f6f130037959eadd9acc784c66d5d94116c46d55f88b6f30f"
+  },
+  "id": "QQCSOFXFW8L8TeQO",
+  "tags": [
+    {
+      "createdAt": "2025-03-26T04:38:26.113Z",
+      "updatedAt": "2025-03-26T04:38:26.113Z",
+      "id": "gkC9mpy7wqOkEpid",
+      "name": "SEO"
+    },
+    {
+      "createdAt": "2025-03-27T04:21:44.542Z",
+      "updatedAt": "2025-03-27T04:21:44.542Z",
+      "id": "u4xFsRM5y7a66GnB",
+      "name": "keyword research"
+    },
+    {
+      "createdAt": "2025-04-04T00:24:26.625Z",
+      "updatedAt": "2025-04-04T00:24:26.625Z",
+      "id": "ziEsf9MQrh4JNMAQ",
+      "name": "v3"
+    }
+  ]
+}
