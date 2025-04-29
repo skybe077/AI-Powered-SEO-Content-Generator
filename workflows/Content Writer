@@ -1,0 +1,694 @@
+{
+  "name": "Content Writer - v1",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -420,
+        -680
+      ],
+      "id": "03d91a68-fc07-4880-b480-190684b4085e",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4583a2f3-9ca7-4ac7-b75f-907a85825f3f",
+              "name": "user_id",
+              "value": "={{ $('SELECT Content Plans').item.json.user_id }}",
+              "type": "string"
+            },
+            {
+              "id": "96a52ce6-5232-4eed-8366-fdba419a641c",
+              "name": "seed_concept",
+              "value": "={{ $('SELECT Content Plans').item.json.seed_concept }}",
+              "type": "string"
+            },
+            {
+              "id": "4ef8bdb6-23c0-4723-b1fa-8556c292343a",
+              "name": "geo",
+              "value": "={{ $('SELECT Content Plans').item.json.geo }}",
+              "type": "string"
+            },
+            {
+              "id": "23e798e7-1436-4468-a777-aadabd5324fb",
+              "name": "topic_delocalised",
+              "value": "={{ $('SELECT Content Plans').item.json.topic_delocalised }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2160,
+        -280
+      ],
+      "id": "b25f9b44-05dc-4d65-bf2e-92b221d10173",
+      "name": "Add Metadata"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "articles",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        500,
+        -280
+      ],
+      "id": "58b9a391-6e78-42b1-96d4-ba77210b9a94",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "jsCode": "// This Function node processes each input item\nreturn items.map(item => {\n  const raw = item.json.articles\n\n  const cleaned = raw\n    .replace(/^```json\\s*/, '')       // remove starting ```json\n    .replace(/\\s*```$/, '')           // remove ending ```\n    .replace(/^\"(.*)\"$/, '$1')        // remove surrounding double quotes\n    .trim();\n\n  let parsed;\n\n  try {\n    parsed = JSON.parse(cleaned);\n  } catch (err) {\n    throw new Error('Failed to parse JSON: ' + err.message);\n  }\n\n  return {\n    json: {\n      ...parsed\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        -280
+      ],
+      "id": "b30f8d66-c154-415d-8ef2-ace1e9f56e03",
+      "name": "Parse Supporting Articles"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {
+          "temperature": 0.9
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1420,
+        -60
+      ],
+      "id": "c9b8cc33-8255-4f13-9aa9-60ac41ced43f",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "9eMoPi1uSsfDFA76",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        1420,
+        -280
+      ],
+      "id": "8be898bd-dfc9-4745-9015-592a26390cd4",
+      "name": "Content Planner1"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "content_clusters",
+          "mode": "list",
+          "cachedResultName": "content_clusters"
+        },
+        "limit": {},
+        "where": {
+          "values": [
+            {
+              "column": "geo",
+              "value": "={{ $json.geo }}"
+            },
+            {
+              "column": "topic_delocalised",
+              "value": "={{ $json.topic }}"
+            },
+            {
+              "column": "user_id",
+              "value": "={{ $json.user_id }}"
+            },
+            {
+              "column": "group_title",
+              "value": "={{ $json.group_title }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        20,
+        -280
+      ],
+      "id": "9438a4c1-000a-4309-96bf-7e3a2e9322b6",
+      "name": "SELECT Content Plans",
+      "credentials": {
+        "postgres": {
+          "id": "gHDVg0wQVPiBMdAw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "articles",
+          "mode": "list",
+          "cachedResultName": "articles"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "xata_updatedat",
+              "displayName": "xata_updatedat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "xata_id",
+              "displayName": "xata_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "xata_version",
+              "displayName": "xata_version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "xata_createdat",
+              "displayName": "xata_createdat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "keywords",
+              "displayName": "keywords",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "array",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "group_title",
+              "displayName": "group_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "geo",
+              "displayName": "geo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "type",
+              "displayName": "type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "topic_delocalised",
+              "displayName": "topic_delocalised",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "seed_concept",
+              "displayName": "seed_concept",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "outline",
+              "displayName": "outline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "array",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        2440,
+        -280
+      ],
+      "id": "68ca16c0-adfe-494a-9a7f-7648cc8f0272",
+      "name": "INSERT Content Articles",
+      "credentials": {
+        "postgres": {
+          "id": "gHDVg0wQVPiBMdAw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 🧠 Content Creator Agent – Prototype \n**Last Updated: 18 Apr 2025**\n\nThis agent transforms content plans into full-length SEO articles tailored for LinkedIn long-form format. It generates one article per content brief, structures each using a prompt-based template, and stores the final output into the `articles` table.\n\n---\n\n#### 🔍 Overview  \nThe agent:\n- Loads grouped content plans for a topic and user\n- Extracts individual article briefs (title, summary, keywords, etc.)\n- Constructs high-fidelity prompts per article\n- Uses GPT-4o to generate full articles in Markdown format\n- Parses, enriches, and stores final output into Xata\n\n---\n\n### 🧩 Key Features  \n1. Retrieves content clusters from DB (based on user, topic, geo)  \n2. Splits multi-article plans into individual entries  \n3. Applies advanced prompt templating (tone, style, audience, SEO checklist)  \n4. Handles malformed JSON via robust parsing logic  \n5. Saves to `articles` table with full metadata\n\n---\n\n### 🔁 Feedback or Loop Logic  \n- JSON parser includes error handling for formatting inconsistencies  \n- Optional `limit` for testing one article at a time  \n- `prompt` node structured for easy future updates or A/B testing\n\n---\n\n### 🧪 Inputs  \n- `topic`, `geo`, `user_id`, `seed_concept`  \n- `content_clusters` table entries, including grouped article briefs\n\n---\n\n### 📤 Outputs  \nEach record saved to `articles` includes:\n- `title`, `content`, `outline`, `keywords`  \n- `group_title`, `type`, `topic_delocalised`, `geo`, `seed_concept`, `user_id`\n\n---\n\n### 🔧 Stack  \n- n8n  \n- OpenAI GPT-4o (via LangChain)  \n- Postgres (Xata-compatible)  \n- AppSmith",
+        "height": 820,
+        "width": 480
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1540,
+        -620
+      ],
+      "id": "15a47ca2-6b69-46a9-a72a-a651815260cb",
+      "name": "📘 Content Creator Agent – README"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 1: Load & Prepare Content Plans\n**Purpose**:  \nFetch existing article briefs from the `content_clusters` table.\n\n**Flow**:\n- Filters by `geo`, `topic_delocalised`, and `user_id`\n- Limits result (optional) for controlled testing\n- Splits `articles[]` array into individual briefs",
+        "height": 400,
+        "width": 500,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        -500
+      ],
+      "id": "5126c6b7-4ea8-42de-90b4-0edcf82b09aa",
+      "name": "🧩 Block 1: Load & Prepare Content Plans"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 2: Clean & Normalize Article Briefs\n**Purpose**:  \nPrepare and validate each article brief before prompt generation.\n\n**Actions**:\n- Use Function node to clean up and parse JSON safely\n- Handles possible formatting edge cases\n- Adds metadata (group title, geo)",
+        "height": 400,
+        "width": 620,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        220,
+        -500
+      ],
+      "id": "9fcc7bec-663e-484d-a88b-4c424c3c9317",
+      "name": "🧩 Block 2: Clean & Normalize Article Briefs"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 3: Generate Articles via GPT\n**Purpose**:  \nCreate full article drafts from structured prompts.\n\n**Flow**:\n- Inject all article metadata into a reusable `Set` prompt template  \n- Uses GPT-4o via LangChain agent  \n- Parses final output JSON (title, content, outline, etc.)",
+        "height": 440,
+        "width": 840,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        900,
+        -500
+      ],
+      "id": "3dea40aa-fef9-4ea2-b4a0-9b1594a55dcd",
+      "name": "🧩 Block 3: Generate Articles via GPT"
+    },
+    {
+      "parameters": {
+        "content": "### 🧩 Block 4: Finalize & Store\n**Purpose**:  \nAdd metadata and write generated articles to the `articles` table.\n\n**Actions**:\n- Add `geo`, `user_id`, `topic`, and `group_title` metadata\n- Save clean output to Postgres (Xata-compatible)\n- Supports downstream content distribution workflows",
+        "height": 440,
+        "width": 760,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1800,
+        -500
+      ],
+      "id": "208b4c4e-b2cc-447f-9d22-5e7a073864d8",
+      "name": "🧩 Block 4: Finalize & Store"
+    },
+    {
+      "parameters": {
+        "content": "### 🔁 Feedback or Loop Logic  \n- JSON parser includes error handling for formatting inconsistencies  \n- Optional `limit` for testing one article at a time  \n- `prompt` node structured for easy future updates or A/B testing\n\n---\n\n### 🧪 Inputs  \n- `topic`, `geo`, `user_id`, `seed_concept`  \n- `content_clusters` table entries, including grouped article briefs\n\n---\n\n### 📤 Outputs  \nEach record saved to `articles` includes:\n- `title`, `content`, `outline`, `keywords`  \n- `group_title`, `type`, `topic_delocalised`, `geo`, `seed_concept`, `user_id`\n\n---\n\n### 🔧 Stack  \n- n8n  \n- OpenAI GPT-4o (via LangChain)  \n- Postgres (Xata-compatible)  \n- AppSmith",
+        "height": 820,
+        "width": 440
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1020,
+        -620
+      ],
+      "id": "fcc808f1-3885-4264-a0fc-51e9baaade26",
+      "name": "📘 Content Creator Agent – README1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// This Function node processes each input item\nreturn items.map(item => {\n  const raw = item.json.output;\n\n  // Remove ```json and ``` wrappers\n  const cleaned = raw\n    .replace(/^```json\\n/, '')\n    .replace(/^```json/, '')    \n    .replace(/\\n```$/, '')\n    .trim();\n\n  let parsed;\n\n  try {\n    parsed = JSON.parse(cleaned);\n  } catch (err) {\n    throw new Error('Failed to parse JSON: ' + err.message);\n  }\n\n  return {\n    json: {\n      ...parsed\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        -280
+      ],
+      "id": "20c9275a-9c39-4964-9b85-cea5e24567b7",
+      "name": "Parse LLM Output"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        220,
+        -280
+      ],
+      "id": "331fe092-ba83-419d-a3de-9c62a39c8878",
+      "name": "Limit",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "602066fc-7871-4be3-8388-4a725a76396a",
+              "name": "prompt",
+              "value": "=You are a senior content strategist and expert SEO writer.\nWrite a natural, engaging, and insightful article for a professional audience, based on the content brief below.\n\nThis article belongs to the content cluster: \"{{ $json.group_title }}\"\nIt may be a pillar or supporting article — please adjust the scope and structure accordingly..\n\nContent Brief:\n1. Title: {{ $json.title }}\n2. Article Type:{{ $json.type }} \n3. Summary/Brief: {{ $json.summary }}\n4. Primary Keyword: {{ $json.keyword_focus }}\n5. Secondary Keywords: [{{ $json.secondary_keywords }}]\n6. Target Audience: {{ $json.target_audience }}\n7. Audience Intent: {{ $json.audience_intent }}\n8. Recommended Internal Links: [{{ $json.recommended_internal_links }}]\n9. Geo: {{ $json.geo }}\n10. Tone: Clear, thoughtful, and conversational (not robotic)\n11. Format: Markdown with proper headings (H2s, H3s)\n12. Chanel: LinkedIn long form\n \nInstructions:\nA) If type is \"pillar\":\n  1. Write a comprehensive, evergreen article (1,200–1,500 words)\n  2. Cover broad strategic themes, frameworks, and practical examples\n  3. Link out to supporting content where relevant\n\nB) If type is \"supporting\":\n  1. Focus the article around a specific sub-topic or long-tail query (800–1,000 words)\n  2. Offer focused value, tools, and examples\n  3. Link back to the pillar article\n\nAvoid:\n- Filler phrases, clichés, jargon, emojis, semicolons, hashtags\n- Conditional or vague language when certainty is possible\n- Repetitive or fluffy language\n- AI-sounding intros like \"In today’s digital world...\"\n\nStyle Guide:\n- Clear and direct\n- Short sentences, simple words\n- No hype or marketing lingo\n- Conversational tone\n- Address the reader as “you”\n- Use varied sentence lengths\n- Use active voice\n\nSEO Checklist:\n- Use 2024–2025 statistics and trend data\n- Include 1–2 expert quotes\n- Apply JSON-LD Article schema: https://schema.org/Article\n- Include 4–6 H2s, and 1–2 H3s per H2\n- Add 3–8 internal links and 2–5 relevant external links\n- Include a 5–6 question FAQ section\n- Optimize metadata\n\nReturn the output in valid JSON format with the following structure. Do not include code block formatting or explanations.\n{\n  \"title\": \"<same as input title>\",\n  \"content\": \"<full markdown article>\",\n  \"outline\": [\n    \"Introduction: Set the context...\",\n    \"What is XYZ...\",\n    \"Benefits of XYZ...\",\n    \"How to implement...\",\n    \"Examples...\",\n    \"Conclusion and next steps...\"\n  ],\n  \"keywords\": [\"<primary>\", \"<secondary1>\", \"<secondary2>\"],\n  \"type\": \"<pillar or supporting>\",\n  \"group_title\": \"<same as input group_title>\"\n}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1180,
+        -280
+      ],
+      "id": "50ada8d3-e75b-420f-b8cf-3c7feb0d2af6",
+      "name": "Writing Prompt"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a0d58989-9480-4bb1-a730-2fb531072f83",
+              "name": "group_title",
+              "value": "={{ $('SELECT Content Plans').item.json.group_title }}",
+              "type": "string"
+            },
+            {
+              "id": "335d6ead-a952-461c-9a99-c363a6a44577",
+              "name": "geo",
+              "value": "={{ $('SELECT Content Plans').item.json.geo }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        920,
+        -280
+      ],
+      "id": "89c009a5-2766-4407-b624-0e74dcf0f27f",
+      "name": "Add geo + Group title"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -440,
+        -280
+      ],
+      "id": "165fa6b0-464e-4644-8d86-052b78b255ba",
+      "name": "Content Writer"
+    }
+  ],
+  "pinData": {
+    "When clicking ‘Test workflow’": [
+      {
+        "json": {
+          "user_id": "s@gmail.com",
+          "topic": "ai applications",
+          "group_title": "AI Applications in Healthcare",
+          "geo": "sg"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "Add Metadata": {
+      "main": [
+        [
+          {
+            "node": "INSERT Content Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Parse Supporting Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Content Planner1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Planner1": {
+      "main": [
+        [
+          {
+            "node": "Parse LLM Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Supporting Articles": {
+      "main": [
+        [
+          {
+            "node": "Add geo + Group title",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SELECT Content Plans": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse LLM Output": {
+      "main": [
+        [
+          {
+            "node": "Add Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Writing Prompt": {
+      "main": [
+        [
+          {
+            "node": "Content Planner1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add geo + Group title": {
+      "main": [
+        [
+          {
+            "node": "Writing Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Writer": {
+      "main": [
+        [
+          {
+            "node": "SELECT Content Plans",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "aeb197f9-c7d7-42e2-9251-c5c95fe574aa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8cd025641d0a304f6f130037959eadd9acc784c66d5d94116c46d55f88b6f30f"
+  },
+  "id": "WKiY8bccdaQIcltX",
+  "tags": [
+    {
+      "createdAt": "2025-03-26T06:13:27.248Z",
+      "updatedAt": "2025-03-26T06:13:27.248Z",
+      "id": "i27H8fqPeB5mUuFo",
+      "name": "v1"
+    },
+    {
+      "createdAt": "2025-04-09T06:08:49.817Z",
+      "updatedAt": "2025-04-09T06:08:49.817Z",
+      "id": "uS4v0R4yu0NrHzQU",
+      "name": "content creator"
+    }
+  ]
+}
