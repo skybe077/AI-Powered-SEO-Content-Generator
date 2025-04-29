@@ -25,7 +25,7 @@ Built over 30 days (Mar–Apr 2025) as a proof-of-concept for intelligent, modul
 
 ---
 
-🧱 System Architecture
+## 🧱 System Architecture
 
 ![AI-Powered SEO Content Generator System Architecture](../main/images/sys_architecture.png)
 
@@ -67,5 +67,25 @@ Built over 30 days (Mar–Apr 2025) as a proof-of-concept for intelligent, modul
 - 📊 Structured Xata/Postgres backend
 
 ---
+
+## Project Structure 
+
+AI-Powered-SEO-Content-Generator/
+│
+├── README.md
+├── /workflows/
+│   ├── topic-expander.json
+│   ├── seo-agent.json
+│   ├── content-writer.json
+│   └── ...
+├── /appsmith/
+│   └── content-generator-app.json
+├── /examples/
+│   ├── input-output-seed-to-article.md
+│   └── keyword-categorization-sample.json
+├── /docs/
+│   ├── architecture-diagram.png
+│   └── prompts.md
+└── LICENSE
 
 
