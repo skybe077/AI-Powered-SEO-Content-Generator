@@ -1,0 +1,1 @@
+Read `AGENTS.md` and `docs/ENGINEERING_CONTRACT.md` before changes. Preserve project restrictions; use `docs/ACCEPTANCE_TEMPLATE.md` and independent `review-code` for consequential work. Tests-green is not live acceptance.

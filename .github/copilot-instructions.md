@@ -1,0 +1,1 @@
+Read root AGENTS.md and docs/ENGINEERING_CONTRACT.md. Predeclare intended behaviour, negative/failure tests; no example-specific semantic shortcut. Require separate reviewer or REVIEW PENDING, preserve project owner restrictions; report actual SHA and unverified live checks.

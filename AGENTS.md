@@ -1,0 +1,7 @@
+# Agent instructions for AI-Powered-SEO-Content-Generator
+
+Read [docs/ENGINEERING_CONTRACT.md](docs/ENGINEERING_CONTRACT.md), [docs/ACCEPTANCE_TEMPLATE.md](docs/ACCEPTANCE_TEMPLATE.md) where consequential, and the task's original user goal **before** modifying code, model prompts, workflows, tests, CI or release state. Existing CURRENT/NEXT, AI_INSTRUCTIONS and project-specific safety rules remain in force. More restrictive rules win; ask before changing an owner decision. Do not optimise for a test sentence, weaken failing checks, or self-certify. A different reviewer uses `.cursor/skills/review-code/` or `.agents/skills/review-code/`; if unavailable, report REVIEW PENDING. Keep GitHub as technical/live source of truth and Notion as orientation/decisions/evidence summary.
+
+**Local boundary:** Historical 2025 n8n/Appsmith/GPT-4o proof of concept. Preserve exported workflows and retrospective, do not claim integrations or provider metrics work today without a run. Do not publish content, mutate SEO topics or invoke paid APIs during a policy retrofit. Keyword volume/CPC and ranking facts require actual dated provider data; intent/topic relevance and editorial quality are bounded semantic judgments with reviewer counterexamples.
+
+Do not treat a draft policy PR as adopted on main until merged. No automatic push, merge, deployment or consequential action from a review/briefing alone.
