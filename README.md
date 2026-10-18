@@ -1,5 +1,8 @@
 # 🧠 AI-Powered SEO Content Generator (n8n + Appsmith + GPT-4o)
 
+**Coding-agent policy (proposal):** [AGENTS.md](AGENTS.md), [Engineering Contract](docs/ENGINEERING_CONTRACT.md), [Acceptance Template](docs/ACCEPTANCE_TEMPLATE.md), and independent `review-code` skill. Static `python scripts/check_agent_contract.py` / contract integrity CI checks reference wiring only, **not** product/runtime acceptance. Historical 2025 n8n/Appsmith proof of concept. No publishing, paid API calls or refreshed provider-metric claims from this policy proposal.
+
+
 This project is a full-stack AI agent system that automates the creation of SEO-optimized content — from a single seed concept to a publish-ready article — using **n8n**, **Appsmith**, and **GPT-4o**.
 
 Built over 30 days (Mar–Apr 2025) as a proof-of-concept for intelligent, modular content workflows.

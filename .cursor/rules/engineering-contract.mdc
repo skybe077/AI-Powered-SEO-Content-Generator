@@ -1,0 +1,6 @@
+---
+description: Always-on engineering and independent acceptance contract
+alwaysApply: true
+---
+
+Read root `AGENTS.md` and `docs/ENGINEERING_CONTRACT.md` (including project-specific restrictions) before changes. Solve intended observable outcomes, predeclare normal/negative/failure acceptance, distinguish objective checks from semantic judgment, challenge lexical shortcuts, require reviewer separate from builder or mark REVIEW PENDING, and report exact SHA/commands vs missing integration/live/approval. Never quietly modify product scope, permissions, schedules or tests to manufacture a pass.
